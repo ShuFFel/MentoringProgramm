@@ -18,22 +18,22 @@ public class SharedResource {
         sourceLock.lock();
         try{
             counter++;
+            log("Source was increased \nSource: "+counter);
         }
         finally {
             sourceLock.unlock();
-        }
-        log("Source was increased \nSource: "+counter);
+        }     
     }
 
     public void decrease(){
         sourceLock.lock();
         try{
             counter--;
+            log("Source was decreased \nSource: "+counter);
         }
         finally {
             sourceLock.unlock();
         }
-        log("Source was decreased \nSource: "+counter);
     }
 
     public synchronized int getCounter() {
