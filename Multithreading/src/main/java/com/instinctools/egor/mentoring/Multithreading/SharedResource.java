@@ -14,7 +14,7 @@ public class SharedResource {
     private int counter = 10;
     private Logger log = LogManager.getLogger(SharedResource.class);
 
-    public synchronized void increase(){
+    public void increase(){
         sourceLock.lock();
         try{
             counter++;
@@ -25,7 +25,7 @@ public class SharedResource {
         log("Source was increased \nSource: "+counter);
     }
 
-    public synchronized void decrease(){
+    public void decrease(){
         sourceLock.lock();
         try{
             counter--;
