@@ -25,7 +25,7 @@ public class ConsoleMenuWithLogger {
                 String jarName = scanner.next();
                 log("Input full Class name: ");
                 String className = scanner.next();
-                log("Input full Class name: ");
+                log("Input full Mehtod name: ");
                 String methodName = scanner.next();
                 try {
                    MyLoader loader = MyLoader.getInstance(path, jarName);
