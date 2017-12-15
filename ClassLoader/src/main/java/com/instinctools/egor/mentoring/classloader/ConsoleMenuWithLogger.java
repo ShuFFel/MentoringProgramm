@@ -22,7 +22,7 @@ public class ConsoleMenuWithLogger {
                 log("Input full path to jar: ");
                 String path = scanner.next();
                 log("Input jar name: ");
-                String jarName = scanner.next();
+                String jarName = scanner.next(); //here i missed DRY principle
                 log("Input full Class name: ");
                 String className = scanner.next();
                 log("Input full Mehtod name: ");

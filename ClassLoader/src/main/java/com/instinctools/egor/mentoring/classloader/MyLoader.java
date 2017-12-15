@@ -15,7 +15,7 @@ public class MyLoader extends URLClassLoader{
         super(urls);
     }
 
-    public static MyLoader getInstance(String pathToJar, String jarName) throws Exception {
+    public static MyLoader getInstance(String pathToJar, String jarName) throws Exception { //here i missed Liskov Substitution Principle
         String url = "file://"+pathToJar+"/" + jarName;
         URL[] urls = {new URL(url)};
         MyLoader myLoader = new MyLoader(urls);
@@ -27,7 +27,7 @@ public class MyLoader extends URLClassLoader{
         return super.loadClass(name);
     }
 
-    public String getMessageFromClass(Class<?> aClass, String methodName) throws Exception {
+    public String getMessageFromClass(Class<?> aClass, String methodName) throws Exception { //here i missed Single Responsibility Principle
         Constructor<?> constructor = aClass.getConstructor();
         Object obj = constructor.newInstance();
         Method method = aClass.getMethod("Say");
