@@ -12,7 +12,7 @@ public class SharedResource {
     private final Lock sourceLock = new ReentrantLock();
     private static final SharedResource istance = new SharedResource();
     private int counter = 10;
-    private Logger log = LogManager.getLogger(SharedResource.class);
+    private static final Logger log = LogManager.getLogger(SharedResource.class);
 
     public void increase(){
         sourceLock.lock();
