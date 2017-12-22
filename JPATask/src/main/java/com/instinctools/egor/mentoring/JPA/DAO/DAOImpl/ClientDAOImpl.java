@@ -2,7 +2,6 @@ package com.instinctools.egor.mentoring.JPA.DAO.DAOImpl;
 
 import com.instinctools.egor.mentoring.JPA.DAO.ClientDAO;
 import com.instinctools.egor.mentoring.JPA.DAO.DAOUtil.DAOUtil;
-import com.instinctools.egor.mentoring.JPA.Entity.Account;
 import com.instinctools.egor.mentoring.JPA.Entity.Client;
 
 import javax.persistence.EntityManager;
@@ -10,6 +9,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ClientDAOImpl implements ClientDAO {
+
+    private static ClientDAOImpl clientDAO = null;
+
+    public static ClientDAOImpl getInstance(){
+        if(clientDAO == null){
+            clientDAO = new ClientDAOImpl();
+        }
+        return clientDAO;
+    }
     public void createClient(Client client) throws SQLException {
         EntityManager session = DAOUtil.getSessionFactory().createEntityManager();
         try {
@@ -53,43 +61,29 @@ public class ClientDAOImpl implements ClientDAO {
         return clients;
     }
 
-    public void createAccount(Client client, Account account) throws SQLException {
+    public Client updateClient(Client client) throws SQLException {
         EntityManager entityManager = DAOUtil.getSessionFactory().createEntityManager();
-        try {
-           entityManager.getTransaction().begin();
-           client.addAccount(account);
-           entityManager.merge(client);
-           entityManager.flush();
-           entityManager.getTransaction().commit();
-        }
-        finally {
-            entityManager.close();
-        }
-    }
-
-    public void deleteAccount(Client client, Account account) throws SQLException {
-        EntityManager entityManager = DAOUtil.getSessionFactory().createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            client.removeAccount(account);
-            entityManager.merge(client);
-            entityManager.getTransaction().commit();
-        }
-        finally {
-            entityManager.close();
-        }
-    }
-
-    public void changeAccount(Account account) throws SQLException {
-        EntityManager entityManager = DAOUtil.getSessionFactory().createEntityManager();
+        Client updatedClient = client;
         try{
             entityManager.getTransaction().begin();
-            entityManager.merge(account);
-            entityManager.flush();
+            entityManager.merge(client);
+            updatedClient = entityManager.find(Client.class, client.getUserId());
             entityManager.getTransaction().commit();
+        }
+        finally {
+            entityManager.close();
+        }
+        return updatedClient;
+    }
+
+    public Client getById(long id) throws SQLException {
+        EntityManager entityManager = DAOUtil.getSessionFactory().createEntityManager();
+        Client clientToReturn = null;
+        try {
+            clientToReturn = entityManager.find(Client.class, id);
         }finally {
             entityManager.close();
         }
-
+        return clientToReturn;
     }
 }

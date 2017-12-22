@@ -19,7 +19,7 @@ public class ClientWorkingMenu {
     }
     public void start(){
         scanner = new Scanner(System.in);
-        int chose;
+        String chose;
         String login, password;
         do{
             System.out.println("Menu: \n" +
@@ -28,9 +28,9 @@ public class ClientWorkingMenu {
                     "3 - show list of all accounts\n" +
                     "4 - delete client\n" +
                     "0 - exit");
-            chose = Integer.parseInt(scanner.next());
+            chose = scanner.next();
             switch(chose){
-                case 1: {
+                case "1": {
                     System.out.println("input username: \n");
                     login = scanner.next();
                     System.out.println("input password: \n");
@@ -42,19 +42,22 @@ public class ClientWorkingMenu {
                     }
                     break;
                 }
-                case 2: {
+                case "2": {
                     Client mainClient = showClients();
-                    if(mainClient == null)break;
+                    if(mainClient == null){
+                        System.out.println("Your choice is exit!");
+                        break;
+                    }
                     System.out.println("Your client: "+ mainClient.toString());
-                    AccountWorkingMenu accountMenu = new AccountWorkingMenu(mainClient);
-                    accountMenu.start();
+                    AccountWorkingMenu accountMenu = new AccountWorkingMenu();
+                    accountMenu.start(mainClient);
                     break;
                 }
-                case 3: {
+                case "3": {
                     displayListOfAllAccounts();
                     break;
                 }
-                case 4:{
+                case "4":{
                     Client clientToDelete = showClients();
                     if(clientToDelete == null)break;
                     try {
@@ -64,7 +67,7 @@ public class ClientWorkingMenu {
                     }
                     break;
                 }
-                case 0:{
+                case "0":{
                     scanner.close();
                     System.exit(0);
                 }
@@ -94,11 +97,12 @@ public class ClientWorkingMenu {
         System.out.println("Chose client: ");
         int i = 1;
         for(Client client: clients){
-            System.out.println(i + " - " + client.toString()/*client.getUserName() + " " + client.getUserId() + "\n"*/);
+            System.out.println(i + " - " + client.toString());
             i++;
         }
         System.out.println("0 - exit");
-        int chose = scanner.nextInt();
-        return (chose != 0)?clients.get(chose - 1):null;
+        String chose = scanner.next();
+        if(Integer.parseInt(chose) > clients.size() || Integer.parseInt(chose) == 0)return null;
+        return clients.get(Integer.parseInt(chose) - 1);
     }
 }

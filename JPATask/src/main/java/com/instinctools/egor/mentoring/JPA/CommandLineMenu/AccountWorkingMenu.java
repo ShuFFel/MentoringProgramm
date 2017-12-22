@@ -2,9 +2,10 @@ package com.instinctools.egor.mentoring.JPA.CommandLineMenu;
 
 import com.instinctools.egor.mentoring.JPA.Entity.Account;
 import com.instinctools.egor.mentoring.JPA.Entity.Client;
-import com.instinctools.egor.mentoring.JPA.Service.AccountService;
-import com.instinctools.egor.mentoring.JPA.Service.DAOServiceImpl.AccountServiceIpml;
+import com.instinctools.egor.mentoring.JPA.Service.ClientService;
+import com.instinctools.egor.mentoring.JPA.Service.DAOServiceImpl.ClientServiceImpl;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,18 +13,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AccountWorkingMenu {
-    private AccountService service;
+    private ClientService service;
     private Scanner scanner;
     private Client mainClient;
 
-    public AccountWorkingMenu(Client client){
-        this.mainClient = client;
-        this.service = new AccountServiceIpml(client);
+    public AccountWorkingMenu(){
+        this.service = new ClientServiceImpl();
     }
 
-    public void start(){
+    public void start(Client client) {
+        this.mainClient = client;
         scanner = new Scanner(System.in);
-        int chose;
+        String chose;
         while(true) {
             System.out.println(mainClient.toString());
             System.out.println("Menu\n" +
@@ -31,9 +32,9 @@ public class AccountWorkingMenu {
                     "2 - change account\n" +
                     "3 - delete account\n" +
                     "0 - go to the previous menu");
-            chose = scanner.nextInt();
+            chose = scanner.next();
             switch (chose){
-                case 1:{
+                case "1":{
                     System.out.println("Input nickname: ");
                     String nickname = scanner.next();
                     System.out.println("Input date of birth(format dd-MM-yy): ");
@@ -45,12 +46,19 @@ public class AccountWorkingMenu {
                         birth_date = new Date(System.currentTimeMillis());
                         e.printStackTrace();
                     }
-                    service.createAccount(new Account(nickname, birth_date));
+                    try {
+                        mainClient = service.createAccount(mainClient.getUserId(), new Account(nickname, birth_date));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
-                case 2:{
+                case "2":{
                     Account chosenAccount = choseAccount();
-                    if(chosenAccount == null)break;
+                    if(chosenAccount == null) {
+                        System.out.println("Your choice is exit!");
+                        break;
+                    }
                     System.out.println("Your Account: "+ chosenAccount.toString());
                     System.out.println("Input new nickname: ");
                     String nickname = scanner.next();
@@ -65,17 +73,25 @@ public class AccountWorkingMenu {
                     }
                     chosenAccount.setDateOfBirth(birth_date);
                     chosenAccount.setNickname(nickname);
-                    service.updateAccount(chosenAccount);
+                    try {
+                        mainClient = service.updateClient(mainClient);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
-                case 3:{
+                case "3":{
                     Account chosenAccount = choseAccount();
                     if(chosenAccount == null)break;
                     System.out.println("Deleted Account: "+ chosenAccount.toString());
-                    service.deleteAccount(chosenAccount);
+                    try {
+                        mainClient = service.deleteAccount(mainClient, chosenAccount);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
-                case 0:{
+                case "0":{
                     return;
                 }
                 default:{
@@ -95,8 +111,9 @@ public class AccountWorkingMenu {
             i++;
         }
         System.out.println("0 - exit");
-        int chose = scanner.nextInt();
-        return (chose != 0)?accountList.get(chose - 1):null;
+        String chose = scanner.next();
+        if(Integer.parseInt(chose) > accountList.size() || Integer.parseInt(chose) == 0)return null;
+        return accountList.get(Integer.parseInt(chose) - 1);
     }
 
 }
