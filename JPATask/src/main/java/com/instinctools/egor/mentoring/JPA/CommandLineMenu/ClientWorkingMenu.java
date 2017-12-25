@@ -14,8 +14,8 @@ public class ClientWorkingMenu {
     private ClientService clientService;
     private Scanner scanner;
 
-    public ClientWorkingMenu(){
-        clientService = new ClientServiceImpl();
+    public ClientWorkingMenu(ClientService clientService){
+        this.clientService = clientService;
     }
     public void start(){
         scanner = new Scanner(System.in);
