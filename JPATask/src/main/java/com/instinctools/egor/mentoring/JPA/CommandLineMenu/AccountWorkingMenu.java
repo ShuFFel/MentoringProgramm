@@ -17,8 +17,8 @@ public class AccountWorkingMenu {
     private Scanner scanner;
     private Client mainClient;
 
-    public AccountWorkingMenu(){
-        this.service = new ClientServiceImpl();
+    public AccountWorkingMenu(ClientService service){
+        this.service = service;
     }
 
     public void start(Client client) {
