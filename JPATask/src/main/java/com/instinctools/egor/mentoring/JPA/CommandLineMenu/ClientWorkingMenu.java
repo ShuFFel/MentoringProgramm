@@ -49,7 +49,7 @@ public class ClientWorkingMenu {
                         break;
                     }
                     System.out.println("Your client: "+ mainClient.toString());
-                    AccountWorkingMenu accountMenu = new AccountWorkingMenu();
+                    AccountWorkingMenu accountMenu = new AccountWorkingMenu(clientService);
                     accountMenu.start(mainClient);
                     break;
                 }
