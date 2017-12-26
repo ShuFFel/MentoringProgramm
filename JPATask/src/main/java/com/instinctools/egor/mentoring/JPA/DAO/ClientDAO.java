@@ -1,6 +1,6 @@
 package com.instinctools.egor.mentoring.JPA.DAO;
 
-import com.instinctools.egor.mentoring.JPA.Entity.Client;
+import com.instinctools.egor.mentoring.JPA.entity.Client;
 
 import java.sql.SQLException;
 import java.util.List;
