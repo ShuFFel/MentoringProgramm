@@ -1,7 +1,7 @@
 package com.instinctools.egor.mentoring.JPA;
 
-import com.instinctools.egor.mentoring.JPA.commandlinemenu.ClientWorkingMenu;
-import com.instinctools.egor.mentoring.JPA.service.DAOServiceImpl.ClientServiceImpl;
+import com.instinctools.egor.mentoring.JPA.CommandLineMenu.ClientWorkingMenu;
+import com.instinctools.egor.mentoring.JPA.Service.DAOServiceImpl.ClientServiceImpl;
 
 public class Main {
 
