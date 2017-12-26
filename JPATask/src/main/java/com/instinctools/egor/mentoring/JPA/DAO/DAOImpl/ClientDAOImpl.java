@@ -37,7 +37,6 @@ public class ClientDAOImpl implements ClientDAO {
         try {
             session.getTransaction().begin();
             session.remove(session.contains(client) ? client : session.merge(client));
-            session.flush();
             session.getTransaction().commit();
         }
         finally {

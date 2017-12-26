@@ -62,6 +62,7 @@ public class ClientWorkingMenu {
                     if (clientToDelete == null) break;
                     try {
                         clientService.deleteClient(clientToDelete);
+                        System.out.println(clientToDelete.toString()+"\nDeleted!");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
