@@ -12,9 +12,11 @@ public class ClientWorkingMenu {
 
     private ClientService clientService;
     private Scanner scanner;
+    private AccountWorkingMenu accountMenu;
 
-    public ClientWorkingMenu(ClientService clientService) {
+    public ClientWorkingMenu(ClientService clientService, AccountWorkingMenu accountMenu) {
         this.clientService = clientService;
+        this.accountMenu = accountMenu;
     }
 
     public void start() {
@@ -49,7 +51,6 @@ public class ClientWorkingMenu {
                         break;
                     }
                     System.out.println("Your client: " + mainClient.toString());
-                    AccountWorkingMenu accountMenu = new AccountWorkingMenu(clientService);
                     accountMenu.start(mainClient);
                     break;
                 }
@@ -59,7 +60,10 @@ public class ClientWorkingMenu {
                 }
                 case "4": {
                     Client clientToDelete = showClients();
-                    if (clientToDelete == null) break;
+                    if (clientToDelete == null){
+                        System.out.println("Your choice is exit!");
+                        break;
+                    }
                     try {
                         clientService.deleteClient(clientToDelete);
                         System.out.println(clientToDelete.toString()+"\nDeleted!");
@@ -70,7 +74,8 @@ public class ClientWorkingMenu {
                 }
                 case "0": {
                     scanner.close();
-                    System.exit(0);
+                    System.out.println("EXITED");
+                    return;
                 }
                 default: {
                     System.out.println("Wrong operation!");

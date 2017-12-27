@@ -81,7 +81,10 @@ public class AccountWorkingMenu {
                 }
                 case "3":{
                     Account chosenAccount = choseAccount();
-                    if(chosenAccount == null)break;
+                    if(chosenAccount == null){
+                        System.out.println("Your choice is exit!");
+                        break;
+                    }
                     System.out.println("Deleted Account: "+ chosenAccount.toString());
                     try {
                         mainClient = service.deleteAccount(mainClient, chosenAccount);

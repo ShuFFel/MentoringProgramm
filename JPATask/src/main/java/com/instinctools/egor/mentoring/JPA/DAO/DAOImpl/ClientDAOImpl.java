@@ -10,14 +10,9 @@ import java.util.List;
 
 public class ClientDAOImpl implements ClientDAO {
 
-    private static ClientDAOImpl clientDAO = null;
 
-    public static ClientDAOImpl getInstance(){
-        if(clientDAO == null){
-            clientDAO = new ClientDAOImpl();
-        }
-        return clientDAO;
-    }
+    public ClientDAOImpl() { }
+
     public void createClient(Client client) throws SQLException {
         EntityManager session = DAOUtil.getSessionFactory().createEntityManager();
         try {

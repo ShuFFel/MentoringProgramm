@@ -17,8 +17,8 @@ public class ClientServiceImpl implements ClientService {
 
     private static final Logger logger = LogManager.getLogger(ClientServiceImpl.class);
 
-    public ClientServiceImpl() {
-        this.clientDAO = ClientDAOImpl.getInstance();
+    public ClientServiceImpl(ClientDAO clientDAO) {
+        this.clientDAO = clientDAO;
     }
 
     public List<Client> getAllClients() {

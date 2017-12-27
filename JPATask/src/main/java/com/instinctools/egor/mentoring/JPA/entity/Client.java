@@ -27,13 +27,6 @@ public class Client {
         this.password = password;
     }
 
-    public static void showAccounts(Client client){
-        List<Account> clientAccounts = client.getAccounts();
-        for (Account account: clientAccounts){
-            System.out.println(account.toString());
-        }
-    }
-
     public long getUserId() {
         return userId;
     }
