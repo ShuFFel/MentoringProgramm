@@ -4,8 +4,8 @@
              version="2.0">
     <persistence-unit name="my-perst">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.instinctools.egor.mentoring.noSQL.entity.MySQLEntity.BookSQLEntity</class>
-        <class>com.instinctools.egor.mentoring.noSQL.entity.MySQLEntity.UserSQLEntity</class>
+        <class>com.instinctools.egor.mentoring.noSQL.dal.mysql.entity.BookSQLEntity</class>
+        <class>com.instinctools.egor.mentoring.noSQL.dal.mysql.entity.UserSQLEntity</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"></property>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/library"></property>

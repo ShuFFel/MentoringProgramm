@@ -1,23 +1,26 @@
 package com.instinctools.egor.mentoring.noSQL;
 
-import com.instinctools.egor.mentoring.noSQL.DAO.BookDAO;
-import com.instinctools.egor.mentoring.noSQL.DAO.UserDAO;
-import com.instinctools.egor.mentoring.noSQL.DAO.bookDAOImpl.MongoBookDAOImpl;
-import com.instinctools.egor.mentoring.noSQL.DAO.bookDAOImpl.MySQLBookDAOImpl;
-import com.instinctools.egor.mentoring.noSQL.DAO.userDAOImpl.MongoUserDAOImpl;
-import com.instinctools.egor.mentoring.noSQL.DAO.userDAOImpl.MySQLUserDAOImpl;
-import com.instinctools.egor.mentoring.noSQL.commandlinemenu.BookWorkingMenu;
-import com.instinctools.egor.mentoring.noSQL.commandlinemenu.UserWorkingMenu;
-import com.instinctools.egor.mentoring.noSQL.entity.Book;
-import com.instinctools.egor.mentoring.noSQL.entity.User;
-import com.instinctools.egor.mentoring.noSQL.factory.EntityFactory;
-import com.instinctools.egor.mentoring.noSQL.factory.MongoEntityFactory;
-import com.instinctools.egor.mentoring.noSQL.factory.MySQLEntityFactory;
-import com.instinctools.egor.mentoring.noSQL.service.BookService;
-import com.instinctools.egor.mentoring.noSQL.service.UserService;
-import com.instinctools.egor.mentoring.noSQL.service.serviceImpl.BookServiceImpl;
-import com.instinctools.egor.mentoring.noSQL.service.serviceImpl.UserServiceImpl;
+import com.instinctools.egor.mentoring.noSQL.core.repository.BookRepository;
+import com.instinctools.egor.mentoring.noSQL.core.repository.UserRepository;
+import com.instinctools.egor.mentoring.noSQL.dal.mongo.dao.MongoBookDAO;
+import com.instinctools.egor.mentoring.noSQL.dal.mysql.dao.MySQLBookDAO;
+import com.instinctools.egor.mentoring.noSQL.dal.mongo.dao.MongoUserDAO;
+import com.instinctools.egor.mentoring.noSQL.dal.mysql.dao.MySQLUserDAO;
+import com.instinctools.egor.mentoring.noSQL.ui.BookWorkingMenu;
+import com.instinctools.egor.mentoring.noSQL.ui.UserWorkingMenu;
+import com.instinctools.egor.mentoring.noSQL.core.factory.EntityFactory;
+import com.instinctools.egor.mentoring.noSQL.dal.mongo.factory.MongoEntityFactory;
+import com.instinctools.egor.mentoring.noSQL.dal.mysql.factory.MySQLEntityFactory;
+import com.instinctools.egor.mentoring.noSQL.core.services.BookService;
+import com.instinctools.egor.mentoring.noSQL.core.services.UserService;
+import com.instinctools.egor.mentoring.noSQL.core.services.serviceimpl.BookServiceImpl;
+import com.instinctools.egor.mentoring.noSQL.core.services.serviceimpl.UserServiceImpl;
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Main {
@@ -25,39 +28,32 @@ public class Main {
     private static Scanner scanner;
 
     public static void main(String[] args) {
-        /*UserDAO userDAO = new MongoUserDAOImpl();
-        BookDAO bookDAO = new MongoBookDAOImpl();
-        UserService userService = new UserServiceImpl(userDAO, bookDAO);
-        BookService bookService = new BookServiceImpl(userDAO, bookDAO);
-        Book bok1 = new Book();
-        User user = userService.getAllUsers().get(0);
-        Book book = bookService.getAllBooks().get(0);
-        user.setUser_name("user1");
-        user.addBook(bok1);
-        userService.updateUser(user);
-        book.setName("book1");
-        bookService.updateBook(book);
-        bookService.assignBook(user, book);*/
         scanner = new Scanner(System.in);
         System.out.println("Chose type of storage(SQl by default):\n" +
                 "1 - MySQL\n" +
                 "2 - MongoDB\n");
         Integer chose = scanner.nextInt();
-        UserDAO userDAO;
-        BookDAO bookDAO;
+        UserRepository userRepository = null;
+        BookRepository bookRepository = null;
         EntityFactory factory;
         if(chose == 2){
-            userDAO = new MongoUserDAOImpl();
-            bookDAO = new MongoBookDAOImpl();
+            try {
+                DB mongoDB = new MongoClient("localhost",27017).getDB("test");
+                userRepository = new MongoUserDAO(mongoDB);
+                bookRepository = new MongoBookDAO(mongoDB);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
             factory = new MongoEntityFactory();
         }
         else{
-            userDAO = new MySQLUserDAOImpl();
-            bookDAO = new MySQLBookDAOImpl();
+            EntityManager manager = Persistence.createEntityManagerFactory("my-perst").createEntityManager();
+            userRepository = new MySQLUserDAO(manager);
+            bookRepository = new MySQLBookDAO(manager);
             factory = new MySQLEntityFactory();
         }
-        UserService userService = new UserServiceImpl(userDAO, bookDAO);
-        BookService bookService = new BookServiceImpl(userDAO, bookDAO);
+        UserService userService = new UserServiceImpl(userRepository, bookRepository);
+        BookService bookService = new BookServiceImpl(userRepository, bookRepository);
         BookWorkingMenu bookWorkingMenu = new BookWorkingMenu(bookService, factory);
         UserWorkingMenu userWorkingMenu = new UserWorkingMenu(userService, bookWorkingMenu, factory);
         userWorkingMenu.start();
