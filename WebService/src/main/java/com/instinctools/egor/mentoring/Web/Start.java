@@ -15,11 +15,13 @@ import com.instinctools.egor.mentoring.Web.web.rest.UserServiceRESTImpl;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
+@ApplicationPath("/")
 public class Start extends Application {
 
 	private BookServiceRESTImpl bookServiceREST;
@@ -45,7 +47,7 @@ public class Start extends Application {
 	}
 
 	private void configurate() {
-		DB db = null;
+		DB db;
 		try {
 			db = new MongoClient("localhost", 27017).getDB("test");
 			userRepository = new MongoUserDAO(db);
