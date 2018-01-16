@@ -11,7 +11,7 @@ import com.instinctools.egor.mentoring.Web.web.soap.UserServiceSOAPImpl;
 import javax.xml.ws.Endpoint;
 import java.util.Scanner;
 
-public class Main {
+public class StartSOAP {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

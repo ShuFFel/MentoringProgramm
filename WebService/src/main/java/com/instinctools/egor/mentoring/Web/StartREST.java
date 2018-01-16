@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @ApplicationPath("/")
-public class Start extends Application {
+public class StartREST extends Application {
 
     private BookServiceRESTImpl bookServiceREST;
     private UserServiceRESTImpl userServiceREST;
