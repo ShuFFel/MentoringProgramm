@@ -2,6 +2,8 @@ package com.instinctools.egor.mentoring.Web.web.rest;
 
 import com.instinctools.egor.mentoring.Web.core.entity.Book;
 import com.instinctools.egor.mentoring.Web.core.entity.User;
+import com.instinctools.egor.mentoring.Web.core.services.BookService;
+import com.instinctools.egor.mentoring.Web.core.services.UserService;
 import com.instinctools.egor.mentoring.Web.factories.GenericServices;
 import com.instinctools.egor.mentoring.Web.web.dto.BookDTO;
 
@@ -14,6 +16,8 @@ import java.util.List;
 public class BookServiceRESTImpl {
 
     private SettingRESTService settings;
+    private BookService bookService;
+    private UserService userService;
 
     public BookServiceRESTImpl() {
     }
@@ -26,46 +30,55 @@ public class BookServiceRESTImpl {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBook(BookDTO book) {
+        updateServices();
         Book bookToCreate = GenericServices.getFactory().createBook(book.getName(), book.getAuthor());
-        GenericServices.getBookService(settings.getStorageType()).createBook(bookToCreate);
+        bookService.createBook(bookToCreate);
         String result = "Successfully created: "
-                + GenericServices.getBookService(settings.getStorageType()).getBookById(bookToCreate.getId());
+                + bookService.getBookById(bookToCreate.getId());
         return Response.status(201).entity(result).build();
     }
 
     @DELETE
     @Path("/delete/{id}")
     public Response deleteBook(@PathParam("id") String id) {
-        Book bookToDelete = GenericServices.getBookService(settings.getStorageType()).getBookById(id);
-        GenericServices.getBookService(settings.getStorageType()).deleteBook(bookToDelete);
+        updateServices();
+        Book bookToDelete = bookService.getBookById(id);
+        bookService.deleteBook(bookToDelete);
         String result = "Successfully deleted! " + bookToDelete.toString();
         return Response.status(201).entity(result).build();
     }
 
     @PUT
     @Path("/update/{id}")
-    public void updateBook(String id) {
-        Book bookToUpdate = GenericServices.getBookService(settings.getStorageType()).getBookById(id);
-        GenericServices.getBookService(settings.getStorageType()).updateBook(bookToUpdate);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateBook(String id, BookDTO book) {
+        updateServices();
+        Book bookToUpdate = bookService.getBookById(id);
+        bookToUpdate.setAuthor(book.getAuthor());
+        bookToUpdate.setName(book.getName());
+        bookService.updateBook(bookToUpdate);
     }
 
     @PUT
-    @Path("/assign/{userId}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void assignBook(@PathParam("userId") String userId, String bookId) {
-        Book bookToAssign = GenericServices.getBookService(settings.getStorageType()).getBookById(bookId);
-        User userToAssign = GenericServices.getUserService(settings.getStorageType()).getUserById(userId);
-        GenericServices.getBookService(settings.getStorageType()).assignBook(userToAssign, bookToAssign);
+    @Path("/assign/{userId}/{bookId}")
+    public void assignBook(@PathParam("userId") String userId, @PathParam("bookId") String bookId) {
+        updateServices();
+        Book bookToAssign = bookService.getBookById(bookId);
+        User userToAssign = userService.getUserById(userId);
+        bookService.assignBook(userToAssign, bookToAssign);
     }
 
     @GET
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getAllBooks() {
-        return GenericServices.getBookService(settings.getStorageType()).getAllBooks();
+        updateServices();
+        return bookService.getAllBooks();
     }
 
-    public SettingRESTService getSettings() {
-        return settings;
+    private void updateServices(){
+        bookService = GenericServices.getBookService(settings.getStorageType());
+        userService = GenericServices.getUserService(settings.getStorageType());
     }
+
 }

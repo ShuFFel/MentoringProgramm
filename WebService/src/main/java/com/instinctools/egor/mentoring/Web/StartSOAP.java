@@ -18,7 +18,7 @@ public class StartSOAP {
         System.out.println("Chose type of storage(SQl by default):\n" + "MySQL\n" + "Mongo\n");
         StorageType chose = StorageType.valueOf(scanner.next().toUpperCase());
 
-        GenericServices genericServices = new GenericServices().invoke();
+        new GenericServices().invoke();
         EntityFactory factory = GenericServices.getFactory();
         UserService userService = GenericServices.getUserService(chose);
         BookService bookService = GenericServices.getBookService(chose);

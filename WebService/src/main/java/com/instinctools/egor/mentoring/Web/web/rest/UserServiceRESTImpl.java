@@ -1,8 +1,6 @@
 package com.instinctools.egor.mentoring.Web.web.rest;
 
 import com.instinctools.egor.mentoring.Web.core.entity.User;
-import com.instinctools.egor.mentoring.Web.core.factory.EntityFactory;
-import com.instinctools.egor.mentoring.Web.core.services.BookService;
 import com.instinctools.egor.mentoring.Web.core.services.UserService;
 import com.instinctools.egor.mentoring.Web.factories.GenericServices;
 import com.instinctools.egor.mentoring.Web.web.dto.UserDTO;
@@ -16,6 +14,7 @@ import java.util.List;
 public class UserServiceRESTImpl {
 
     private SettingRESTService settings;
+    private UserService userService;
 
     public UserServiceRESTImpl() {
     }
@@ -28,7 +27,8 @@ public class UserServiceRESTImpl {
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAllUsers() {
-        return GenericServices.getUserService(settings.getStorageType()).getAllUsers();
+        updateUserService();
+        return userService.getAllUsers();
     }
 
     @POST
@@ -36,18 +36,33 @@ public class UserServiceRESTImpl {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(UserDTO user) {
         User createdUser = GenericServices.getFactory().createUser(user.getName(), user.getBirthDate());
-        GenericServices.getUserService(settings.getStorageType()).createUser(createdUser);
-        String result = "Successfully created: " +
-                GenericServices.getUserService(settings.getStorageType()).getUserById(createdUser.getId());
+        updateUserService();
+        userService.createUser(createdUser);
+        String result = "Successfully created: " + userService.getUserById(createdUser.getId());
         return Response.status(201).entity(result).build();
     }
 
     @DELETE
     @Path("/delete/{id}")
     public void deleteUser(@PathParam("id") String id) {
-        User userToDelete = GenericServices.getUserService(settings.getStorageType()).getUserById(id);
-        GenericServices.getUserService(settings.getStorageType()).deleteUser(userToDelete);
+        updateUserService();
+        User userToDelete = userService.getUserById(id);
+        userService.deleteUser(userToDelete);
     }
 
+    @PUT
+    @Path("/update/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateUser(@PathParam("id") String id, UserDTO user) {
+        updateUserService();
+        User userToUpdate = userService.getUserById(id);
+        userToUpdate.setUserName(user.getName());
+        userToUpdate.setDateOfBirth(user.getBirthDate());
+        userService.updateUser(userToUpdate);
+    }
+
+    private void updateUserService(){
+        userService = GenericServices.getUserService(settings.getStorageType());
+    }
 
 }
