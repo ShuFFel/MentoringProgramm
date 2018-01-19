@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints
+        xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
+        version="2.0">
+    <endpoint
+            name="UserService"
+            implementation="com.instinctools.egor.mentoring.web.web.soap.UserServiceSOAPImpl"
+            url-pattern="/userSOAP/*"/>
+    <endpoint
+            name="BookService"
+            implementation="com.instinctools.egor.mentoring.web.web.soap.BookServiceSOAPImpl"
+            url-pattern="/bookSOAP/*"/>
+</endpoints>

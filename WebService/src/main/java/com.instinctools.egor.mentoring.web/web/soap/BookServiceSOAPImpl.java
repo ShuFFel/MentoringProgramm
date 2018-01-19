@@ -2,7 +2,6 @@ package com.instinctools.egor.mentoring.web.web.soap;
 
 import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
-import com.instinctools.egor.mentoring.web.core.factory.EntityFactory;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
 import com.instinctools.egor.mentoring.web.web.dto.BookDTO;
@@ -16,22 +15,18 @@ public class BookServiceSOAPImpl {
 
     private BookService bookService;
     private UserService userService;
-    private EntityFactory factory;
-    private static String string;
 
     public BookServiceSOAPImpl(){}
 
-    public BookServiceSOAPImpl(BookService bookService, UserService userService, EntityFactory factory) {
+    public BookServiceSOAPImpl(BookService bookService, UserService userService) {
         this.bookService = bookService;
         this.userService = userService;
-        this.factory = factory;
     }
 
     @WebMethod
     public void createBook(BookDTO book) {
-        Book bookToCreate = factory.createBook(book.getName(), book.getAuthor());
+        Book bookToCreate = new Book(book.getName(), book.getAuthor());
         bookService.createBook(bookToCreate);
-        string = "AAa";
     }
 
     @WebMethod

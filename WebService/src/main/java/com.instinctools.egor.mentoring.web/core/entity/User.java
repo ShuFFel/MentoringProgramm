@@ -12,6 +12,13 @@ public class User {
     public User(){
         id = UUID.randomUUID().toString();
     }
+
+    public User(String userName, Date dateOfBirth) {
+        id = UUID.randomUUID().toString();
+        this.userName = userName;
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public void addBook(Book book){
         book.setOwner(this);
     }

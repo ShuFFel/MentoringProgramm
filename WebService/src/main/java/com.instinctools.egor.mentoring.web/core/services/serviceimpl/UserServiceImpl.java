@@ -2,54 +2,50 @@ package com.instinctools.egor.mentoring.web.core.services.serviceimpl;
 
 import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
-import com.instinctools.egor.mentoring.web.core.repository.BookRepository;
-import com.instinctools.egor.mentoring.web.core.repository.UserRepository;
+import com.instinctools.egor.mentoring.web.core.factory.ServiceFactory;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
+    private ServiceFactory serviceFactory;
 
-    private UserRepository userRepository;
-    private BookRepository bookRepository;
-
-    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository) {
-        this.userRepository = userRepository;
-        this.bookRepository = bookRepository;
+    public UserServiceImpl(ServiceFactory factory) {
+        this.serviceFactory = factory;
     }
 
     @Override
     public void createUser(User user) {
-        this.userRepository.createUser(user);
+        this.serviceFactory.getUserRepo().createUser(user);
     }
 
     @Override
     public void deleteUser(User user) {
-        List<Book> userBooks = this.bookRepository.getBooksByOwnerId(user.getId());
+        List<Book> userBooks = this.serviceFactory.getBookRepo().getBooksByOwnerId(user.getId());
         userBooks.forEach(book -> {
             user.removeBook(book);
-            bookRepository.updateBook(book);
+            serviceFactory.getBookRepo().updateBook(book);
         });
-        this.userRepository.deleteUser(user);
+        this.serviceFactory.getUserRepo().deleteUser(user);
     }
 
     @Override
     public void updateUser(User user) {
-        List<Book> userBooks = this.bookRepository.getBooksByOwnerId(user.getId());
+        List<Book> userBooks = this.serviceFactory.getBookRepo().getBooksByOwnerId(user.getId());
         userBooks.forEach(book -> {
             user.addBook(book);
-            bookRepository.updateBook(book);
+            serviceFactory.getBookRepo().updateBook(book);
         });
-        this.userRepository.updateUser(user);
+        this.serviceFactory.getUserRepo().updateUser(user);
     }
 
     @Override
     public User getUserById(String id) {
-        return userRepository.getUserById(id);
+        return serviceFactory.getUserRepo().getUserById(id);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        return serviceFactory.getUserRepo().getAllUsers();
     }
 }

@@ -1,7 +1,6 @@
 package com.instinctools.egor.mentoring.web.ui;
 
 import com.instinctools.egor.mentoring.web.core.entity.User;
-import com.instinctools.egor.mentoring.web.core.factory.EntityFactory;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
 
 import java.text.ParseException;
@@ -15,12 +14,10 @@ public class UserWorkingMenu {
     private UserService userService;
     private Scanner scanner;
     private BookWorkingMenu bookMenu;
-    private EntityFactory entityFactory;
 
-    public UserWorkingMenu(UserService userService, BookWorkingMenu bookMenu, EntityFactory entityFactory) {
+    public UserWorkingMenu(UserService userService, BookWorkingMenu bookMenu) {
         this.userService = userService;
         this.bookMenu = bookMenu;
-        this.entityFactory = entityFactory;
     }
 
     public void start() {
@@ -48,7 +45,7 @@ public class UserWorkingMenu {
                         birth_date = new Date(System.currentTimeMillis());
                         e.printStackTrace();
                     }
-                    userService.createUser(entityFactory.createUser(userName, birth_date));
+                    userService.createUser(new User(userName, birth_date));
                     break;
                 }
                 case "2": {

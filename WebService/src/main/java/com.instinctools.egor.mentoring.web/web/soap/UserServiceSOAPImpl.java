@@ -1,8 +1,6 @@
 package com.instinctools.egor.mentoring.web.web.soap;
 
 import com.instinctools.egor.mentoring.web.core.entity.User;
-import com.instinctools.egor.mentoring.web.core.factory.EntityFactory;
-import com.instinctools.egor.mentoring.web.core.services.BookService;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
 import com.instinctools.egor.mentoring.web.web.dto.UserDTO;
 
@@ -12,21 +10,17 @@ import java.util.List;
 
 @WebService
 public class UserServiceSOAPImpl{
-    private EntityFactory factory;
     private UserService userService;
-    private BookService bookService;
 
     public UserServiceSOAPImpl(){}
 
-    public UserServiceSOAPImpl(EntityFactory factory, UserService userService, BookService bookService) {
-        this.factory = factory;
+    public UserServiceSOAPImpl(UserService userServices) {
         this.userService = userService;
-        this.bookService = bookService;
     }
 
     @WebMethod
     public void createUser(UserDTO user) {
-        User userToCreate = factory.createUser(user.getName(), user.getBirthDate());
+        User userToCreate = new User(user.getName(), user.getBirthDate());
         userService.createUser(userToCreate);
     }
 

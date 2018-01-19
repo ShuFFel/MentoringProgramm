@@ -1,32 +1,31 @@
 package com.instinctools.egor.mentoring.web.web.rest;
 
 
+import com.instinctools.egor.mentoring.web.factories.SettingService;
 import com.instinctools.egor.mentoring.web.factories.StorageType;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/settings")
-public class SettingRESTService {
+public class SettingRESTController {
 
-    private StorageType currentStorageType = StorageType.MYSQL;
+    private SettingService service;
+
+    public SettingRESTController(SettingService service) {
+        this.service = service;
+    }
 
     @GET
     @Path("/getStorageType")
     @Produces(MediaType.TEXT_PLAIN)
     public String getCurrStorageType() {
-        return currentStorageType.toString();
+        return service.getCurrentType().toString();
     }
 
     @POST
     @Path("/setStorageType/{type}")
     public void setStorageType(@PathParam("type") StorageType type) {
-        currentStorageType = type;
+        service.setCurrentType(type);
     }
-
-    public StorageType getStorageType() {
-        return currentStorageType;
-    }
-
-
 }

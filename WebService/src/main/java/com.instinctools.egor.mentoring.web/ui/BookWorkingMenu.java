@@ -2,7 +2,6 @@ package com.instinctools.egor.mentoring.web.ui;
 
 import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
-import com.instinctools.egor.mentoring.web.core.factory.EntityFactory;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
 
 import java.util.List;
@@ -11,12 +10,10 @@ import java.util.Scanner;
 public class BookWorkingMenu {
 
     private BookService bookService;
-    private EntityFactory entityFactory;
     private Scanner scanner;
 
-    public BookWorkingMenu(BookService bookService, EntityFactory entityFactory) {
+    public BookWorkingMenu(BookService bookService) {
         this.bookService = bookService;
-        this.entityFactory = entityFactory;
     }
 
     public void start(User user) {
@@ -36,7 +33,7 @@ public class BookWorkingMenu {
                     String bookName = scanner.next();
                     System.out.println("Input author: ");
                     String author = scanner.next();
-                    bookService.createBook(entityFactory.createBook(bookName, author));
+                    bookService.createBook(new Book(bookName, author));
                     break;
                 }
                 case "2": {

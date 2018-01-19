@@ -4,7 +4,6 @@ import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
-import com.instinctools.egor.mentoring.web.factories.GenericServices;
 import com.instinctools.egor.mentoring.web.web.dto.BookDTO;
 
 import javax.ws.rs.*;
@@ -13,25 +12,23 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/BookService")
-public class BookServiceRESTImpl {
-
-    private SettingRESTService settings;
+public class BookRESTController {
     private BookService bookService;
     private UserService userService;
 
-    public BookServiceRESTImpl() {
+    public BookRESTController() {
     }
 
-    public BookServiceRESTImpl(SettingRESTService settings) {
-        this.settings = settings;
+    public BookRESTController(BookService bookService, UserService userService) {
+        this.bookService = bookService;
+        this.userService = userService;
     }
 
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBook(BookDTO book) {
-        updateServices();
-        Book bookToCreate = GenericServices.getFactory().createBook(book.getName(), book.getAuthor());
+        Book bookToCreate = new Book(book.getName(), book.getAuthor());
         bookService.createBook(bookToCreate);
         String result = "Successfully created: "
                 + bookService.getBookById(bookToCreate.getId());
@@ -41,7 +38,6 @@ public class BookServiceRESTImpl {
     @DELETE
     @Path("/delete/{id}")
     public Response deleteBook(@PathParam("id") String id) {
-        updateServices();
         Book bookToDelete = bookService.getBookById(id);
         bookService.deleteBook(bookToDelete);
         String result = "Successfully deleted! " + bookToDelete.toString();
@@ -52,7 +48,6 @@ public class BookServiceRESTImpl {
     @Path("/update/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateBook(String id, BookDTO book) {
-        updateServices();
         Book bookToUpdate = bookService.getBookById(id);
         bookToUpdate.setAuthor(book.getAuthor());
         bookToUpdate.setName(book.getName());
@@ -62,7 +57,6 @@ public class BookServiceRESTImpl {
     @PUT
     @Path("/assign/{userId}/{bookId}")
     public void assignBook(@PathParam("userId") String userId, @PathParam("bookId") String bookId) {
-        updateServices();
         Book bookToAssign = bookService.getBookById(bookId);
         User userToAssign = userService.getUserById(userId);
         bookService.assignBook(userToAssign, bookToAssign);
@@ -72,13 +66,7 @@ public class BookServiceRESTImpl {
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getAllBooks() {
-        updateServices();
         return bookService.getAllBooks();
-    }
-
-    private void updateServices(){
-        bookService = GenericServices.getBookService(settings.getStorageType());
-        userService = GenericServices.getUserService(settings.getStorageType());
     }
 
 }
