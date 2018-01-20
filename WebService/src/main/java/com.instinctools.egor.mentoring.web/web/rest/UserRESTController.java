@@ -31,7 +31,7 @@ public class UserRESTController {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(UserDTO user) {
-        User createdUser = new User(user.getName(), user.getBirthDate());
+        User createdUser = user.toModel();
         userService.createUser(createdUser);
         String result = "Successfully created: " + userService.getUserById(createdUser.getId());
         return Response.status(201).entity(result).build();

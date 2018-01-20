@@ -76,11 +76,9 @@ public class BookSQLEntity {
 
 
     public Book toBook() {
-        Book book = new Book();
+        Book book = new Book(author, name);
         book.setId(_id);
         book.setOwner((owner != null) ? owner.toUser() : null);
-        book.setName(name);
-        book.setAuthor(author);
         return book;
     }
 

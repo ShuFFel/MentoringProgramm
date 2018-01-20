@@ -1,6 +1,6 @@
 package com.instinctools.egor.mentoring.web.dal.factory;
 
-import com.instinctools.egor.mentoring.web.core.factory.ServiceFactory;
+import com.instinctools.egor.mentoring.web.core.factory.RepositoryFactory;
 import com.instinctools.egor.mentoring.web.core.repository.BookRepository;
 import com.instinctools.egor.mentoring.web.core.repository.UserRepository;
 import com.instinctools.egor.mentoring.web.dal.mongo.dao.MongoBookDAO;
@@ -13,7 +13,7 @@ import com.mongodb.DB;
 
 import javax.persistence.EntityManager;
 
-public class ServiceFactoryImpl implements ServiceFactory {
+public class RepositoryFactoryImpl implements RepositoryFactory {
     private SettingService settingService;
     private EntityManager entityManager;
     private DB mongoDB;
@@ -22,7 +22,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
     private MongoUserDAO mongoUserDAO;
     private MySQLUserDAO mySQLUserDAO;
 
-    public ServiceFactoryImpl(SettingService settingService, EntityManager entityManager, DB mongoDB) {
+    public RepositoryFactoryImpl(SettingService settingService, EntityManager entityManager, DB mongoDB) {
         this.settingService = settingService;
         this.entityManager = entityManager;
         this.mongoDB = mongoDB;

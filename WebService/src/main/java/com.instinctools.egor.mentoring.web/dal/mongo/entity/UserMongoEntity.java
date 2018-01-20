@@ -81,10 +81,8 @@ public class UserMongoEntity {
     }
 
     public User toUser() {
-        User user = new User();
-        user.setUserName(user_name);
+        User user = new User(user_name, date_of_birth);
         user.setId(_id);
-        user.setDateOfBirth(date_of_birth);
         return user;
     }
 }

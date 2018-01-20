@@ -64,10 +64,8 @@ public class UserSQLEntity{
     }
 
     public User toUser(){
-        User user = new User();
+        User user = new User(user_name, date_of_birth);
         user.setId(_id);
-        user.setUserName(user_name);
-        user.setDateOfBirth(date_of_birth);
         return user;
     }
 

@@ -1,17 +1,19 @@
 package com.instinctools.egor.mentoring.web;
 
-import com.instinctools.egor.mentoring.web.core.factory.ServiceFactory;
+import com.instinctools.egor.mentoring.web.core.factory.RepositoryFactory;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
 import com.instinctools.egor.mentoring.web.core.services.serviceimpl.BookServiceImpl;
 import com.instinctools.egor.mentoring.web.core.services.serviceimpl.UserServiceImpl;
-import com.instinctools.egor.mentoring.web.dal.factory.ServiceFactoryImpl;
+import com.instinctools.egor.mentoring.web.dal.factory.RepositoryFactoryImpl;
 import com.instinctools.egor.mentoring.web.factories.SettingService;
 import com.instinctools.egor.mentoring.web.factories.StorageType;
 import com.instinctools.egor.mentoring.web.web.rest.BookRESTController;
 import com.instinctools.egor.mentoring.web.web.rest.SettingRESTController;
 import com.instinctools.egor.mentoring.web.web.rest.UserRESTController;
 import com.mongodb.DB;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.ApplicationPath;
@@ -24,7 +26,7 @@ import java.util.Set;
 
 @ApplicationPath("/")
 public class JerseyRESTConfig extends Application {
-
+    private static final Logger log = LogManager.getLogger();
     private BookRESTController bookServiceREST;
     private UserRESTController userServiceREST;
     private SettingRESTController settings;
@@ -53,21 +55,21 @@ public class JerseyRESTConfig extends Application {
         try {
             configs = new Configs("application.properties");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         StorageType type = Objects.requireNonNull(configs).getStorageType();
         DB mongoDB = null;
         try {
             mongoDB = configs.getMongoDB();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         EntityManager entityManager = configs.getEntityManager();
         SettingService settingService = new SettingService(type);
 
-        ServiceFactory serviceFactory = new ServiceFactoryImpl(settingService, entityManager, mongoDB);
-        UserService userService = new UserServiceImpl(serviceFactory);
-        BookService bookService = new BookServiceImpl(serviceFactory);
+        RepositoryFactory repositoryFactory = new RepositoryFactoryImpl(settingService, entityManager, mongoDB);
+        UserService userService = new UserServiceImpl(repositoryFactory);
+        BookService bookService = new BookServiceImpl(repositoryFactory);
         bookServiceREST = new BookRESTController(bookService, userService);
         userServiceREST = new UserRESTController(userService);
         settings = new SettingRESTController(settingService);

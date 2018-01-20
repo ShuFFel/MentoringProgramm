@@ -8,10 +8,6 @@ public class Book {
     private String name;
     private User owner;
 
-    public Book() {
-        id = UUID.randomUUID().toString();
-    }
-
     public Book(String author, String name) {
         id = UUID.randomUUID().toString();
         this.author = author;

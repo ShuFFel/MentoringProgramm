@@ -9,10 +9,6 @@ public class User {
     private String userName;
     private Date dateOfBirth;
 
-    public User(){
-        id = UUID.randomUUID().toString();
-    }
-
     public User(String userName, Date dateOfBirth) {
         id = UUID.randomUUID().toString();
         this.userName = userName;

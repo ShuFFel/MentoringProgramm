@@ -79,9 +79,7 @@ public class BookMongoEntity {
     }
 
     public Book toBook() {
-        Book book = new Book();
-        book.setAuthor(author);
-        book.setName(name);
+        Book book = new Book(author, name);
         book.setOwner((owner != null) ? owner.toUser() : null);
         book.setId(_id);
         return book;

@@ -28,7 +28,7 @@ public class BookRESTController {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBook(BookDTO book) {
-        Book bookToCreate = new Book(book.getName(), book.getAuthor());
+        Book bookToCreate = book.toModel();
         bookService.createBook(bookToCreate);
         String result = "Successfully created: "
                 + bookService.getBookById(bookToCreate.getId());
