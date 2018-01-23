@@ -11,6 +11,8 @@ import com.instinctools.egor.mentoring.web.factories.StorageType;
 import com.instinctools.egor.mentoring.web.web.rest.BookRESTController;
 import com.instinctools.egor.mentoring.web.web.rest.SettingRESTController;
 import com.instinctools.egor.mentoring.web.web.rest.UserRESTController;
+import com.instinctools.egor.mentoring.web.web.soap.BookServiceSOAPImpl;
+import com.instinctools.egor.mentoring.web.web.soap.UserServiceSOAPImpl;
 import com.mongodb.DB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import javax.persistence.EntityManager;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -29,6 +32,8 @@ public class JerseyRESTConfig extends Application {
     private static final Logger log = LogManager.getLogger();
     private BookRESTController bookServiceREST;
     private UserRESTController userServiceREST;
+    private UserServiceSOAPImpl userServiceSOAP;
+    private BookServiceSOAPImpl bookServiceSOAP;
     private SettingRESTController settings;
 
     @Override
@@ -73,5 +78,11 @@ public class JerseyRESTConfig extends Application {
         bookServiceREST = new BookRESTController(bookService, userService);
         userServiceREST = new UserRESTController(userService);
         settings = new SettingRESTController(settingService);
+        if (userServiceSOAP == null && bookServiceSOAP == null) {
+            userServiceSOAP = new UserServiceSOAPImpl(userService);
+            bookServiceSOAP = new BookServiceSOAPImpl(bookService, userService);
+            Endpoint.publish(configs.getBookSOAPAddress(), bookServiceSOAP);
+            Endpoint.publish(configs.getUserSOAPAddress(), userServiceSOAP);
+        }
     }
 }
