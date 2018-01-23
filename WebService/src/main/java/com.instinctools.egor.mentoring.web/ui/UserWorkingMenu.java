@@ -23,7 +23,6 @@ public class UserWorkingMenu {
     public void start() {
         scanner = new Scanner(System.in);
         String chose;
-        String userName;
         do {
             System.out.println("Menu: \n" +
                     "1 - create user\n" +
@@ -34,60 +33,34 @@ public class UserWorkingMenu {
             chose = scanner.next();
             switch (chose) {
                 case "1": {
-                    System.out.println("input username: \n");
-                    userName = scanner.next();
-                    System.out.println("input date of birth(format dd-MM-yy): \n");
-                    String date = scanner.next();
-                    Date birth_date;
-                    try {
-                        birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
-                    } catch (ParseException e) {
-                        birth_date = new Date(System.currentTimeMillis());
-                        e.printStackTrace();
-                    }
-                    userService.createUser(new User(userName, birth_date));
+                    createUser();
                     break;
                 }
                 case "2": {
                     User mainUser = showUsers();
                     if (mainUser == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        startNextMenu(mainUser);
                     }
-                    System.out.println("Your user: " + mainUser.toString());
-                    bookMenu.start(mainUser);
                     break;
                 }
                 case "3": {
                     User userToDelete = showUsers();
                     if (userToDelete == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        deleteUser(userToDelete);
                     }
-                    userService.deleteUser(userToDelete);
-                    System.out.println(userToDelete.toString() + "\nDeleted!");
                     break;
                 }
                 case "4": {
                     User userToUpdate = showUsers();
                     if (userToUpdate == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        updateUser(userToUpdate);
                     }
-                    System.out.println("input new username: \n");
-                    userName = scanner.next();
-                    System.out.println("input new date of birth(format dd-MM-yy): \n");
-                    String date = scanner.next();
-                    Date birth_date;
-                    try {
-                        birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
-                    } catch (ParseException e) {
-                        birth_date = new Date(System.currentTimeMillis());
-                        e.printStackTrace();
-                    }
-                    userToUpdate.setUserName(userName);
-                    userToUpdate.setDateOfBirth(birth_date);
-                    userService.updateUser(userToUpdate);
                     break;
                 }
                 case "0": {
@@ -101,6 +74,50 @@ public class UserWorkingMenu {
                 }
             }
         } while (true);
+    }
+
+    private void updateUser(User userToUpdate) {
+        String userName;
+        System.out.println("input new username: \n");
+        userName = scanner.next();
+        System.out.println("input new date of birth(format dd-MM-yy): \n");
+        String date = scanner.next();
+        Date birth_date;
+        try {
+            birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
+        } catch (ParseException e) {
+            birth_date = new Date(System.currentTimeMillis());
+            e.printStackTrace();
+        }
+        userToUpdate.setUserName(userName);
+        userToUpdate.setDateOfBirth(birth_date);
+        userService.updateUser(userToUpdate);
+    }
+
+    private void deleteUser(User userToDelete) {
+        userService.deleteUser(userToDelete);
+        System.out.println(userToDelete.toString() + "\nDeleted!");
+    }
+
+    private void startNextMenu(User mainUser) {
+        System.out.println("Your user: " + mainUser.toString());
+        bookMenu.start(mainUser);
+    }
+
+    private void createUser() {
+        String userName;
+        System.out.println("input username: \n");
+        userName = scanner.next();
+        System.out.println("input date of birth(format dd-MM-yy): \n");
+        String date = scanner.next();
+        Date birth_date;
+        try {
+            birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
+        } catch (ParseException e) {
+            birth_date = new Date(System.currentTimeMillis());
+            e.printStackTrace();
+        }
+        userService.createUser(new User(userName, birth_date));
     }
 
     private User showUsers() {

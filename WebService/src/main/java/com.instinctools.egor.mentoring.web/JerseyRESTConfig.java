@@ -3,6 +3,8 @@ package com.instinctools.egor.mentoring.web;
 import com.instinctools.egor.mentoring.web.core.factory.RepositoryFactory;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
+import com.instinctools.egor.mentoring.web.core.services.decorators.bookdecorator.LoggingBookDecorator;
+import com.instinctools.egor.mentoring.web.core.services.decorators.userdecorator.LoggingUserDecorator;
 import com.instinctools.egor.mentoring.web.core.services.serviceimpl.BookServiceImpl;
 import com.instinctools.egor.mentoring.web.core.services.serviceimpl.UserServiceImpl;
 import com.instinctools.egor.mentoring.web.dal.factory.RepositoryFactoryImpl;
@@ -68,8 +70,8 @@ public class JerseyRESTConfig extends Application {
         SettingService settingService = new SettingService(type);
 
         RepositoryFactory repositoryFactory = new RepositoryFactoryImpl(settingService, entityManager, mongoDB);
-        UserService userService = new UserServiceImpl(repositoryFactory);
-        BookService bookService = new BookServiceImpl(repositoryFactory);
+        UserService userService = new LoggingUserDecorator(new UserServiceImpl(repositoryFactory));
+        BookService bookService = new LoggingBookDecorator(new BookServiceImpl(repositoryFactory));
         bookServiceREST = new BookRESTController(bookService, userService);
         userServiceREST = new UserRESTController(userService);
         settings = new SettingRESTController(settingService);

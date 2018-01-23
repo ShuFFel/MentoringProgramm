@@ -29,46 +29,34 @@ public class BookWorkingMenu {
             chose = scanner.next();
             switch (chose) {
                 case "1": {
-                    System.out.println("Input name of book: ");
-                    String bookName = scanner.next();
-                    System.out.println("Input author: ");
-                    String author = scanner.next();
-                    bookService.createBook(new Book(bookName, author));
+                    createBook();
                     break;
                 }
                 case "2": {
                     Book chosenBook = choseBook();
                     if (chosenBook == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        updateBook(chosenBook);
                     }
-                    System.out.println("Your Book: " + chosenBook.toString());
-                    System.out.println("Input new name of book: ");
-                    String bookName = scanner.next();
-                    System.out.println("Input new author: ");
-                    String author = scanner.next();
-                    chosenBook.setAuthor(author);
-                    chosenBook.setName(bookName);
-                    bookService.updateBook(chosenBook);
                     break;
                 }
                 case "3": {
                     Book chosenBook = choseBook();
                     if (chosenBook == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        deleteBook(chosenBook);
                     }
-                    System.out.println("Deleted book: " + chosenBook.toString());
-                    bookService.deleteBook(chosenBook);
                     break;
                 }
                 case "4": {
                     Book chosenBook = choseBook();
                     if (chosenBook == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        assignBook(user, chosenBook);
                     }
-                    bookService.assignBook(user, chosenBook);
                     break;
                 }
                 case "0": {
@@ -80,6 +68,34 @@ public class BookWorkingMenu {
                 }
             }
         }
+    }
+
+    private void assignBook(User user, Book chosenBook) {
+        bookService.assignBook(user, chosenBook);
+    }
+
+    private void deleteBook(Book chosenBook) {
+        System.out.println("Deleted book: " + chosenBook.toString());
+        bookService.deleteBook(chosenBook);
+    }
+
+    private void updateBook(Book chosenBook) {
+        System.out.println("Your Book: " + chosenBook.toString());
+        System.out.println("Input new name of book: ");
+        String bookName = scanner.next();
+        System.out.println("Input new author: ");
+        String author = scanner.next();
+        chosenBook.setAuthor(author);
+        chosenBook.setName(bookName);
+        bookService.updateBook(chosenBook);
+    }
+
+    private void createBook() {
+        System.out.println("Input name of book: ");
+        String bookName = scanner.next();
+        System.out.println("Input author: ");
+        String author = scanner.next();
+        bookService.createBook(new Book(bookName, author));
     }
 
     private Book choseBook() {
