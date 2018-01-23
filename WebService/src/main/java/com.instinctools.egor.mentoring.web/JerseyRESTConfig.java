@@ -24,6 +24,7 @@ import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,8 +33,6 @@ public class JerseyRESTConfig extends Application {
     private static final Logger log = LogManager.getLogger();
     private BookRESTController bookServiceREST;
     private UserRESTController userServiceREST;
-    private UserServiceSOAPImpl userServiceSOAP;
-    private BookServiceSOAPImpl bookServiceSOAP;
     private SettingRESTController settings;
 
     @Override
@@ -48,14 +47,19 @@ public class JerseyRESTConfig extends Application {
     @Override
     public Set<Object> getSingletons() {
         HashSet<Object> h = new HashSet<>();
-        configurate();
         h.add(bookServiceREST);
         h.add(userServiceREST);
         h.add(settings);
         return h;
     }
 
-    private void configurate() {
+    @Override
+    public Map<String, Object> getProperties() {
+        configure();
+        return super.getProperties();
+    }
+
+    private void configure() {
         Configs configs = null;
         try {
             configs = new Configs("application.properties");
@@ -78,11 +82,7 @@ public class JerseyRESTConfig extends Application {
         bookServiceREST = new BookRESTController(bookService, userService);
         userServiceREST = new UserRESTController(userService);
         settings = new SettingRESTController(settingService);
-        if (userServiceSOAP == null && bookServiceSOAP == null) {
-            userServiceSOAP = new UserServiceSOAPImpl(userService);
-            bookServiceSOAP = new BookServiceSOAPImpl(bookService, userService);
-            Endpoint.publish(configs.getBookSOAPAddress(), bookServiceSOAP);
-            Endpoint.publish(configs.getUserSOAPAddress(), userServiceSOAP);
-        }
+        Endpoint.publish(configs.getBookSOAPAddress(), new BookServiceSOAPImpl(bookService, userService));
+        Endpoint.publish(configs.getUserSOAPAddress(), new UserServiceSOAPImpl(userService));
     }
 }
