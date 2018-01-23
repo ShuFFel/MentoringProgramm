@@ -1,0 +1,17 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="my-perst">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.instinctools.egor.mentoring.web.dal.mysql.entity.BookSQLEntity</class>
+        <class>com.instinctools.egor.mentoring.web.dal.mysql.entity.UserSQLEntity</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"></property>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/library"></property>
+            <property name="javax.persistence.jdbc.user" value="newuser"></property>
+            <property name="javax.persistence.jdbc.password" value="password"></property>
+            <property name="hibernate.hbm2ddl.auto" value="update"></property>
+        </properties>
+    </persistence-unit>
+</persistence>
