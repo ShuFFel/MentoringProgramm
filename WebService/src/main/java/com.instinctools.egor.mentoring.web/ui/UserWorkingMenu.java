@@ -2,15 +2,15 @@ package com.instinctools.egor.mentoring.web.ui;
 
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
+import com.instinctools.egor.mentoring.web.ui.commands.Command;
+import com.instinctools.egor.mentoring.web.ui.commands.user.CreateCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.user.DeleteCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.user.UpdateCommand;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserWorkingMenu {
-
+    private static Stack<Command> history = new Stack<Command>();
     private UserService userService;
     private Scanner scanner;
     private BookWorkingMenu bookMenu;
@@ -33,7 +33,7 @@ public class UserWorkingMenu {
             chose = scanner.next();
             switch (chose) {
                 case "1": {
-                    createUser();
+                    executeCommand(new CreateCommand(userService));
                     break;
                 }
                 case "2": {
@@ -50,7 +50,7 @@ public class UserWorkingMenu {
                     if (userToDelete == null) {
                         System.out.println("Your choice is exit!");
                     } else {
-                        deleteUser(userToDelete);
+                        executeCommand(new DeleteCommand(userService, userToDelete));
                     }
                     break;
                 }
@@ -59,8 +59,12 @@ public class UserWorkingMenu {
                     if (userToUpdate == null) {
                         System.out.println("Your choice is exit!");
                     } else {
-                        updateUser(userToUpdate);
+                        executeCommand(new UpdateCommand(userService, userToUpdate));
                     }
+                    break;
+                }
+                case "5": {
+                    System.out.println(showHistory());
                     break;
                 }
                 case "0": {
@@ -76,48 +80,20 @@ public class UserWorkingMenu {
         } while (true);
     }
 
-    private void updateUser(User userToUpdate) {
-        String userName;
-        System.out.println("input new username: \n");
-        userName = scanner.next();
-        System.out.println("input new date of birth(format dd-MM-yy): \n");
-        String date = scanner.next();
-        Date birth_date;
-        try {
-            birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
-        } catch (ParseException e) {
-            birth_date = new Date(System.currentTimeMillis());
-            e.printStackTrace();
-        }
-        userToUpdate.setUserName(userName);
-        userToUpdate.setDateOfBirth(birth_date);
-        userService.updateUser(userToUpdate);
+    private void executeCommand(Command command){
+        command.execute();
+        history.push(command);
     }
 
-    private void deleteUser(User userToDelete) {
-        userService.deleteUser(userToDelete);
-        System.out.println(userToDelete.toString() + "\nDeleted!");
+    private List<String> showHistory(){
+        List<String> result = new ArrayList<>();
+        history.forEach(command -> result.add(command.showInfo()));
+        return result;
     }
 
     private void startNextMenu(User mainUser) {
         System.out.println("Your user: " + mainUser.toString());
         bookMenu.start(mainUser);
-    }
-
-    private void createUser() {
-        String userName;
-        System.out.println("input username: \n");
-        userName = scanner.next();
-        System.out.println("input date of birth(format dd-MM-yy): \n");
-        String date = scanner.next();
-        Date birth_date;
-        try {
-            birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
-        } catch (ParseException e) {
-            birth_date = new Date(System.currentTimeMillis());
-            e.printStackTrace();
-        }
-        userService.createUser(new User(userName, birth_date));
     }
 
     private User showUsers() {
