@@ -13,8 +13,8 @@ import com.instinctools.egor.mentoring.web.factories.StorageType;
 import com.instinctools.egor.mentoring.web.ui.BookWorkingMenu;
 import com.instinctools.egor.mentoring.web.ui.UserWorkingMenu;
 import com.mongodb.DB;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 import java.util.Objects;
 
 public class Starter {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(Starter.class);
 
     public static void main(String[] args) {
         Configs configs = null;

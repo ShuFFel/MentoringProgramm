@@ -14,8 +14,8 @@ import com.instinctools.egor.mentoring.web.web.rest.BookRESTController;
 import com.instinctools.egor.mentoring.web.web.rest.SettingRESTController;
 import com.instinctools.egor.mentoring.web.web.rest.UserRESTController;
 import com.mongodb.DB;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.ApplicationPath;
@@ -28,7 +28,7 @@ import java.util.Set;
 
 @ApplicationPath("/")
 public class JerseyRESTConfig extends Application {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(JerseyRESTConfig.class);
     private BookRESTController bookServiceREST;
     private UserRESTController userServiceREST;
     private SettingRESTController settings;
@@ -57,18 +57,17 @@ public class JerseyRESTConfig extends Application {
         try {
             configs = new Configs("application.properties");
         } catch (IOException e) {
-            log.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         StorageType type = Objects.requireNonNull(configs).getStorageType();
         DB mongoDB = null;
         try {
             mongoDB = configs.getMongoDB();
         } catch (UnknownHostException e) {
-            log.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         EntityManager entityManager = configs.getEntityManager();
         SettingService settingService = new SettingService(type);
-
         RepositoryFactory repositoryFactory = new RepositoryFactoryImpl(settingService, entityManager, mongoDB);
         UserService userService = new LoggingUserDecorator(new UserServiceImpl(repositoryFactory));
         BookService bookService = new LoggingBookDecorator(new BookServiceImpl(repositoryFactory));

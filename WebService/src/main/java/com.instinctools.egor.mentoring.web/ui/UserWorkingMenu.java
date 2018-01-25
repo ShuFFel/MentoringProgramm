@@ -3,6 +3,7 @@ package com.instinctools.egor.mentoring.web.ui;
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
 import com.instinctools.egor.mentoring.web.ui.commands.Command;
+import com.instinctools.egor.mentoring.web.ui.commands.LibraryCommandHistory;
 import com.instinctools.egor.mentoring.web.ui.commands.user.CreateCommand;
 import com.instinctools.egor.mentoring.web.ui.commands.user.DeleteCommand;
 import com.instinctools.egor.mentoring.web.ui.commands.user.UpdateCommand;
@@ -10,7 +11,7 @@ import com.instinctools.egor.mentoring.web.ui.commands.user.UpdateCommand;
 import java.util.*;
 
 public class UserWorkingMenu {
-    private static Stack<Command> history = new Stack<Command>();
+    private static LibraryCommandHistory history = LibraryCommandHistory.getInstance();
     private UserService userService;
     private Scanner scanner;
     private BookWorkingMenu bookMenu;
@@ -29,6 +30,8 @@ public class UserWorkingMenu {
                     "2 - work with existing user\n" +
                     "3 - delete user\n" +
                     "4 - change user\n" +
+                    "5 - show history" +
+                    "6 - undo" +
                     "0 - exit");
             chose = scanner.next();
             switch (chose) {
@@ -67,6 +70,10 @@ public class UserWorkingMenu {
                     System.out.println(showHistory());
                     break;
                 }
+                case "6": {
+                    undo();
+                    break;
+                }
                 case "0": {
                     scanner.close();
                     System.out.println("EXITED");
@@ -80,15 +87,18 @@ public class UserWorkingMenu {
         } while (true);
     }
 
-    private void executeCommand(Command command){
+    private void executeCommand(Command command) {
         command.execute();
         history.push(command);
     }
 
-    private List<String> showHistory(){
-        List<String> result = new ArrayList<>();
-        history.forEach(command -> result.add(command.showInfo()));
-        return result;
+    private List<String> showHistory() {
+        return history.getHistoryInfo();
+    }
+
+    private void undo() {
+        Command command = history.pop();
+        if (command != null) command.undo();
     }
 
     private void startNextMenu(User mainUser) {

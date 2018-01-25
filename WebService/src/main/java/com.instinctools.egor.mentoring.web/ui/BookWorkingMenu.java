@@ -4,19 +4,18 @@ import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
 import com.instinctools.egor.mentoring.web.ui.commands.Command;
+import com.instinctools.egor.mentoring.web.ui.commands.LibraryCommandHistory;
 import com.instinctools.egor.mentoring.web.ui.commands.book.AssignCommand;
 import com.instinctools.egor.mentoring.web.ui.commands.book.CreateCommand;
 import com.instinctools.egor.mentoring.web.ui.commands.book.DeleteCommand;
 import com.instinctools.egor.mentoring.web.ui.commands.book.UpdateCommand;
-import com.sun.istack.NotNull;
 
-import javax.sound.midi.Soundbank;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class BookWorkingMenu {
-    private static Stack<Command> commands = new Stack<>();
+    private static LibraryCommandHistory history = LibraryCommandHistory.getInstance();
     private BookService bookService;
     private Scanner scanner;
 
@@ -33,6 +32,8 @@ public class BookWorkingMenu {
                     "2 - change book\n" +
                     "3 - delete book\n" +
                     "4 - take book\n" +
+                    "5 - show history" +
+                    "6 - undo" +
                     "0 - go to the previous menu");
             chose = scanner.next();
             switch (chose) {
@@ -67,8 +68,12 @@ public class BookWorkingMenu {
                     }
                     break;
                 }
-                case "5":{
+                case "5": {
                     showHistory();
+                    break;
+                }
+                case "6": {
+                    undo();
                     break;
                 }
                 case "0": {
@@ -84,11 +89,16 @@ public class BookWorkingMenu {
 
     private void executeCommand(Command command) {
         command.execute();
-        commands.push(command);
+        history.push(command);
+    }
+
+    private void undo() {
+        Command command = history.pop();
+        if (command != null) command.undo();
     }
 
     private void showHistory() {
-        System.out.println(commands);
+        System.out.println(history);
     }
 
     private Book choseBook() {

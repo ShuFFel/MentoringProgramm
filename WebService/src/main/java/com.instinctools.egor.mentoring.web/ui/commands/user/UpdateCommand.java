@@ -12,12 +12,12 @@ import java.util.Scanner;
 public class UpdateCommand extends Command {
     private static final Scanner SCANNER = new Scanner(System.in);
     private final UserService userService;
-    private final User userToUpdate;
+    private final User backupUser;
 
     public UpdateCommand(UserService userService, User userToUpdate) {
         super();
         this.userService = userService;
-        this.userToUpdate = userToUpdate;
+        backupUser = userToUpdate;
     }
 
     @Override
@@ -27,16 +27,21 @@ public class UpdateCommand extends Command {
         userName = SCANNER.next();
         System.out.println("input new date of birth(format dd-MM-yy): \n");
         String date = SCANNER.next();
-        Date birth_date;
+        Date birthDate;
         try {
-            birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
+            birthDate = new SimpleDateFormat("dd-MM-yy").parse(date);
         } catch (ParseException e) {
-            birth_date = new Date(System.currentTimeMillis());
+            birthDate = new Date(System.currentTimeMillis());
             e.printStackTrace();
         }
-        userToUpdate.setUserName(userName);
-        userToUpdate.setDateOfBirth(birth_date);
+        User userToUpdate = new User(userName, birthDate);
+        userToUpdate.setId(backupUser.getId());
         userService.updateUser(userToUpdate);
+    }
+
+    @Override
+    public void undo() {
+        userService.updateUser(backupUser);
     }
 
     @Override

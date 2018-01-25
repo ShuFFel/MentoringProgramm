@@ -3,47 +3,48 @@ package com.instinctools.egor.mentoring.web.core.services.decorators.bookdecorat
 import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class LoggingBookDecorator extends BaseBookDecorator {
-    private static final Logger log = LogManager.getLogger();
+public class LoggingBookDecorator implements BookService {
+    private static final Logger log = LoggerFactory.getLogger(LoggingBookDecorator.class);
+    private BookService wrappee;
 
     public LoggingBookDecorator(BookService wrappee) {
-        super(wrappee);
+        this.wrappee = wrappee;
     }
 
     @Override
     public void createBook(Book book) {
-        super.createBook(book);
+        wrappee.createBook(book);
         log.info("Book: " + book.toString() + "\nCreated");
     }
 
     @Override
     public void deleteBook(Book book) {
-        super.deleteBook(book);
+        wrappee.deleteBook(book);
         log.info("Book: " + book.toString() + "\nDeleted");
     }
 
     @Override
     public void updateBook(Book book) {
-        super.updateBook(book);
+        wrappee.updateBook(book);
         log.info("Book with id: " + book.getId() + " was updated\n" +
                 "Result: " + book.toString());
     }
 
     @Override
     public void assignBook(User user, Book book) {
-        super.assignBook(user, book);
+        wrappee.assignBook(user, book);
         log.info("Book: " + book.toString() + " was assigned to user: " + user.getUserName());
     }
 
     @Override
     public Book getBookById(String id) {
         log.info("You look for book with id: " + id + "\n");
-        Book bookById = super.getBookById(id);
+        Book bookById = wrappee.getBookById(id);
         log.info("Found book: " + bookById.toString());
         return bookById;
     }
@@ -51,6 +52,6 @@ public class LoggingBookDecorator extends BaseBookDecorator {
     @Override
     public List<Book> getAllBooks() {
         log.info("You look for list of all books");
-        return super.getAllBooks();
+        return wrappee.getAllBooks();
     }
 }

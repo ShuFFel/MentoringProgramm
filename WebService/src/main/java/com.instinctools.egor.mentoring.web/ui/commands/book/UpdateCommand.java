@@ -10,11 +10,13 @@ public class UpdateCommand extends Command {
     private static final Scanner SCANNER = new Scanner(System.in);
     private final BookService bookService;
     private final Book bookToUpDate;
+    private final Book backupBook;
 
     public UpdateCommand(BookService bookService, Book bookToUpDate) {
         super();
         this.bookService = bookService;
         this.bookToUpDate = bookToUpDate;
+        backupBook = bookToUpDate;
     }
 
     @Override
@@ -24,9 +26,15 @@ public class UpdateCommand extends Command {
         String bookName = SCANNER.next();
         System.out.println("Input new author: ");
         String author = SCANNER.next();
-        bookToUpDate.setAuthor(author);
-        bookToUpDate.setName(bookName);
-        bookService.updateBook(bookToUpDate);
+        Book book = new Book(author, bookName);
+        book.setId(backupBook.getId());
+        book.setOwner(backupBook.getOwner());
+        bookService.updateBook(book);
+    }
+
+    @Override
+    public void undo() {
+        bookService.updateBook(backupBook);
     }
 
     @Override

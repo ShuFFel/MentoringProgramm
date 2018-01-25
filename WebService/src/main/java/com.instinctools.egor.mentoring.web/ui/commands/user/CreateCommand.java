@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class CreateCommand extends Command {
     private static final Scanner SCANNER = new Scanner(System.in);
     private final UserService service;
+    private static User backup;
 
     public CreateCommand(UserService service) {
         super();
@@ -25,14 +26,20 @@ public class CreateCommand extends Command {
         userName = SCANNER.next();
         System.out.println("input date of birth(format dd-MM-yy): \n");
         String date = SCANNER.next();
-        Date birth_date;
+        Date birthDate;
         try {
-            birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
+            birthDate = new SimpleDateFormat("dd-MM-yy").parse(date);
         } catch (ParseException e) {
-            birth_date = new Date(System.currentTimeMillis());
+            birthDate = new Date(System.currentTimeMillis());
             e.printStackTrace();
         }
-        service.createUser(new User(userName, birth_date));
+        backup = new User(userName, birthDate);
+        service.createUser(backup);
+    }
+
+    @Override
+    public void undo() {
+        service.deleteUser(backup);
     }
 
     @Override
