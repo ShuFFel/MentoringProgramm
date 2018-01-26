@@ -3,12 +3,19 @@ package com.instinctools.egor.mentoring.web.ui;
 import com.instinctools.egor.mentoring.web.core.entity.Book;
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.BookService;
+import com.instinctools.egor.mentoring.web.ui.commands.Command;
+import com.instinctools.egor.mentoring.web.ui.commands.LibraryCommandHistory;
+import com.instinctools.egor.mentoring.web.ui.commands.book.AssignCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.book.CreateCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.book.DeleteCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.book.UpdateCommand;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class BookWorkingMenu {
-
+    private static LibraryCommandHistory history = LibraryCommandHistory.getInstance();
     private BookService bookService;
     private Scanner scanner;
 
@@ -25,50 +32,48 @@ public class BookWorkingMenu {
                     "2 - change book\n" +
                     "3 - delete book\n" +
                     "4 - take book\n" +
+                    "5 - show history" +
+                    "6 - undo" +
                     "0 - go to the previous menu");
             chose = scanner.next();
             switch (chose) {
                 case "1": {
-                    System.out.println("Input name of book: ");
-                    String bookName = scanner.next();
-                    System.out.println("Input author: ");
-                    String author = scanner.next();
-                    bookService.createBook(new Book(bookName, author));
+                    executeCommand(new CreateCommand(bookService));
                     break;
                 }
                 case "2": {
                     Book chosenBook = choseBook();
                     if (chosenBook == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        executeCommand(new UpdateCommand(bookService, chosenBook));
                     }
-                    System.out.println("Your Book: " + chosenBook.toString());
-                    System.out.println("Input new name of book: ");
-                    String bookName = scanner.next();
-                    System.out.println("Input new author: ");
-                    String author = scanner.next();
-                    chosenBook.setAuthor(author);
-                    chosenBook.setName(bookName);
-                    bookService.updateBook(chosenBook);
                     break;
                 }
                 case "3": {
                     Book chosenBook = choseBook();
                     if (chosenBook == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        executeCommand(new DeleteCommand(bookService, chosenBook));
                     }
-                    System.out.println("Deleted book: " + chosenBook.toString());
-                    bookService.deleteBook(chosenBook);
                     break;
                 }
                 case "4": {
                     Book chosenBook = choseBook();
                     if (chosenBook == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        executeCommand(new AssignCommand(bookService, user, chosenBook));
                     }
-                    bookService.assignBook(user, chosenBook);
+                    break;
+                }
+                case "5": {
+                    showHistory();
+                    break;
+                }
+                case "6": {
+                    undo();
                     break;
                 }
                 case "0": {
@@ -80,6 +85,20 @@ public class BookWorkingMenu {
                 }
             }
         }
+    }
+
+    private void executeCommand(Command command) {
+        command.execute();
+        history.push(command);
+    }
+
+    private void undo() {
+        Command command = history.pop();
+        if (command != null) command.undo();
+    }
+
+    private void showHistory() {
+        System.out.println(history);
     }
 
     private Book choseBook() {

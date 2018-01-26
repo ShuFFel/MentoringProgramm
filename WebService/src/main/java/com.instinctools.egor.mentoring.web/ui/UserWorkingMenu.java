@@ -2,15 +2,16 @@ package com.instinctools.egor.mentoring.web.ui;
 
 import com.instinctools.egor.mentoring.web.core.entity.User;
 import com.instinctools.egor.mentoring.web.core.services.UserService;
+import com.instinctools.egor.mentoring.web.ui.commands.Command;
+import com.instinctools.egor.mentoring.web.ui.commands.LibraryCommandHistory;
+import com.instinctools.egor.mentoring.web.ui.commands.user.CreateCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.user.DeleteCommand;
+import com.instinctools.egor.mentoring.web.ui.commands.user.UpdateCommand;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserWorkingMenu {
-
+    private static LibraryCommandHistory history = LibraryCommandHistory.getInstance();
     private UserService userService;
     private Scanner scanner;
     private BookWorkingMenu bookMenu;
@@ -23,71 +24,54 @@ public class UserWorkingMenu {
     public void start() {
         scanner = new Scanner(System.in);
         String chose;
-        String userName;
         do {
             System.out.println("Menu: \n" +
                     "1 - create user\n" +
                     "2 - work with existing user\n" +
                     "3 - delete user\n" +
                     "4 - change user\n" +
+                    "5 - show history" +
+                    "6 - undo" +
                     "0 - exit");
             chose = scanner.next();
             switch (chose) {
                 case "1": {
-                    System.out.println("input username: \n");
-                    userName = scanner.next();
-                    System.out.println("input date of birth(format dd-MM-yy): \n");
-                    String date = scanner.next();
-                    Date birth_date;
-                    try {
-                        birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
-                    } catch (ParseException e) {
-                        birth_date = new Date(System.currentTimeMillis());
-                        e.printStackTrace();
-                    }
-                    userService.createUser(new User(userName, birth_date));
+                    executeCommand(new CreateCommand(userService));
                     break;
                 }
                 case "2": {
                     User mainUser = showUsers();
                     if (mainUser == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        startNextMenu(mainUser);
                     }
-                    System.out.println("Your user: " + mainUser.toString());
-                    bookMenu.start(mainUser);
                     break;
                 }
                 case "3": {
                     User userToDelete = showUsers();
                     if (userToDelete == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        executeCommand(new DeleteCommand(userService, userToDelete));
                     }
-                    userService.deleteUser(userToDelete);
-                    System.out.println(userToDelete.toString() + "\nDeleted!");
                     break;
                 }
                 case "4": {
                     User userToUpdate = showUsers();
                     if (userToUpdate == null) {
                         System.out.println("Your choice is exit!");
-                        break;
+                    } else {
+                        executeCommand(new UpdateCommand(userService, userToUpdate));
                     }
-                    System.out.println("input new username: \n");
-                    userName = scanner.next();
-                    System.out.println("input new date of birth(format dd-MM-yy): \n");
-                    String date = scanner.next();
-                    Date birth_date;
-                    try {
-                        birth_date = new SimpleDateFormat("dd-MM-yy").parse(date);
-                    } catch (ParseException e) {
-                        birth_date = new Date(System.currentTimeMillis());
-                        e.printStackTrace();
-                    }
-                    userToUpdate.setUserName(userName);
-                    userToUpdate.setDateOfBirth(birth_date);
-                    userService.updateUser(userToUpdate);
+                    break;
+                }
+                case "5": {
+                    System.out.println(showHistory());
+                    break;
+                }
+                case "6": {
+                    undo();
                     break;
                 }
                 case "0": {
@@ -101,6 +85,25 @@ public class UserWorkingMenu {
                 }
             }
         } while (true);
+    }
+
+    private void executeCommand(Command command) {
+        command.execute();
+        history.push(command);
+    }
+
+    private List<String> showHistory() {
+        return history.getHistoryInfo();
+    }
+
+    private void undo() {
+        Command command = history.pop();
+        if (command != null) command.undo();
+    }
+
+    private void startNextMenu(User mainUser) {
+        System.out.println("Your user: " + mainUser.toString());
+        bookMenu.start(mainUser);
     }
 
     private User showUsers() {
