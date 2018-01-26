@@ -9,8 +9,10 @@ public class DeleteCommand extends Command {
     private final User user;
     private final User backupUser;
 
-    public DeleteCommand(UserService userService, User user) {
+    public DeleteCommand(final UserService userService, final User user) {
         super();
+        String commandInformation = getCommandInformation();
+        setCommandInformation(commandInformation.concat(" Command type: Delete\n"));
         this.userService = userService;
         this.user = user;
         backupUser = user;
@@ -28,6 +30,6 @@ public class DeleteCommand extends Command {
 
     @Override
     public String showInfo() {
-        return commandInformation.concat(" Command type: Delete\n");
+        return getCommandInformation();
     }
 }

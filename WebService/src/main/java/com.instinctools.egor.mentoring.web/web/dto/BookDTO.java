@@ -10,7 +10,7 @@ public class BookDTO {
     public BookDTO() {
     }
 
-    public BookDTO(String name, String author) {
+    public BookDTO(final String name, final String author) {
         this.name = name;
         this.author = author;
     }

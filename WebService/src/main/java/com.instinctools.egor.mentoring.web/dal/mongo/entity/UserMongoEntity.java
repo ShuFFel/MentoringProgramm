@@ -10,24 +10,24 @@ import java.util.UUID;
 
 public class UserMongoEntity {
     private String _id;
-    private String user_name;
-    private Date date_of_birth;
+    private String userName;
+    private Date dateOfBirth;
 
     public UserMongoEntity() {
         this._id = UUID.randomUUID().toString();
     }
 
-    public UserMongoEntity(String user_name, Date date_of_birth) {
+    public UserMongoEntity(final String userName, final Date dateOfBirth) {
         this._id = UUID.randomUUID().toString();
-        this.date_of_birth = date_of_birth;
-        this.user_name = user_name;
+        this.dateOfBirth = new Date(dateOfBirth.getTime());
+        this.userName = userName;
     }
 
-    public void addBook(Book book) {
+    public void addBook(final Book book) {
         book.setOwner(this.toUser());
     }
 
-    public void removeBook(Book book) {
+    public void removeBook(final Book book) {
         book.setOwner(null);
     }
 
@@ -37,51 +37,51 @@ public class UserMongoEntity {
 
 
     public Date getDateOfBirth() {
-        return this.date_of_birth;
+        return new Date(this.dateOfBirth.getTime());
     }
 
     public String getUserName() {
-        return this.user_name;
+        return this.userName;
     }
 
-    public void setUserName(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(final String userName) {
+        this.userName = userName;
     }
 
-    public void setDateOfBirth(Date date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(final Date dateOfBirth) {
+        this.dateOfBirth = new Date(dateOfBirth.getTime());
     }
 
-    public void setId(String _id) {
-        this._id = _id;
+    public void setId(final String id) {
+        this._id = id;
     }
 
-    public static UserMongoEntity fromDBObject(DBObject object) {
+    public static UserMongoEntity fromDBObject(final DBObject object) {
         UserMongoEntity user = new UserMongoEntity();
         user._id = (String) object.get("_id");
-        user.user_name = (String) object.get("user_name");
-        user.date_of_birth = (Date) object.get("birth_date");
+        user.userName = (String) object.get("userName");
+        user.dateOfBirth = (Date) object.get("birth_date");
         return user;
     }
 
     public DBObject toDbObject() {
         DBObject dbObject = new BasicDBObject();
         dbObject.put("_id", _id);
-        dbObject.put("user_name", user_name);
-        dbObject.put("birth_date", date_of_birth);
+        dbObject.put("userName", userName);
+        dbObject.put("birth_date", dateOfBirth);
         return dbObject;
     }
 
-    public static UserMongoEntity fromUser(User user) {
+    public static UserMongoEntity fromUser(final User user) {
         UserMongoEntity userMongoEntity = new UserMongoEntity();
         userMongoEntity._id = user.getId();
-        userMongoEntity.date_of_birth = user.getDateOfBirth();
-        userMongoEntity.user_name = user.getUserName();
+        userMongoEntity.dateOfBirth = user.getDateOfBirth();
+        userMongoEntity.userName = user.getUserName();
         return userMongoEntity;
     }
 
     public User toUser() {
-        User user = new User(user_name, date_of_birth);
+        User user = new User(userName, dateOfBirth);
         user.setId(_id);
         return user;
     }

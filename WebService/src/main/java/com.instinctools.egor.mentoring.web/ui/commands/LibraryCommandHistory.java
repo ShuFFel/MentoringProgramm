@@ -16,7 +16,7 @@ public final class LibraryCommandHistory {
         history = new Stack<>();
     }
 
-    public void push(Command command) {
+    public void push(final Command command) {
         history.push(command);
     }
 

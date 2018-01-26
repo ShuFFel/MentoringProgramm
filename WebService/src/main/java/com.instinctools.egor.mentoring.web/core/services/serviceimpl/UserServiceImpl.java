@@ -10,17 +10,17 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private RepositoryFactory repositoryFactory;
 
-    public UserServiceImpl(RepositoryFactory factory) {
+    public UserServiceImpl(final RepositoryFactory factory) {
         this.repositoryFactory = factory;
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(final User user) {
         this.repositoryFactory.getUserRepo().createUser(user);
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(final User user) {
         List<Book> userBooks = this.repositoryFactory.getBookRepo().getBooksByOwnerId(user.getId());
         userBooks.forEach(book -> {
             user.removeBook(book);
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(final User user) {
         List<Book> userBooks = this.repositoryFactory.getBookRepo().getBooksByOwnerId(user.getId());
         userBooks.forEach(book -> {
             user.addBook(book);
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(String id) {
+    public User getUserById(final String id) {
         return repositoryFactory.getUserRepo().getUserById(id);
     }
 

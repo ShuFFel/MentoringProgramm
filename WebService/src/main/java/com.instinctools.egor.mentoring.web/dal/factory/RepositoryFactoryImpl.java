@@ -22,7 +22,9 @@ public class RepositoryFactoryImpl implements RepositoryFactory {
     private MongoUserDAO mongoUserDAO;
     private MySQLUserDAO mySQLUserDAO;
 
-    public RepositoryFactoryImpl(SettingService settingService, EntityManager entityManager, DB mongoDB) {
+    public RepositoryFactoryImpl(final SettingService settingService,
+                                 final EntityManager entityManager,
+                                 final DB mongoDB) {
         this.settingService = settingService;
         this.entityManager = entityManager;
         this.mongoDB = mongoDB;

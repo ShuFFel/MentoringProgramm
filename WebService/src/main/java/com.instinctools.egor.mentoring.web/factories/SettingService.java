@@ -3,7 +3,7 @@ package com.instinctools.egor.mentoring.web.factories;
 public class SettingService {
     private StorageType currentType;
 
-    public SettingService(StorageType storageType) {
+    public SettingService(final StorageType storageType) {
         this.currentType = storageType;
     }
 
@@ -11,7 +11,7 @@ public class SettingService {
         return currentType;
     }
 
-    public void setCurrentType(StorageType currentType) {
+    public void setCurrentType(final StorageType currentType) {
         this.currentType = currentType;
     }
 }

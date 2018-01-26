@@ -10,15 +10,15 @@ import java.util.List;
 
 public class MySQLBookDAO implements BookRepository {
 
-    EntityManager manager;
+    private EntityManager manager;
 
-    public MySQLBookDAO(EntityManager manager){
+    public MySQLBookDAO(final EntityManager manager) {
         this.manager = manager;
     }
 
 
     @Override
-    public void createBook(Book book) {
+    public void createBook(final Book book) {
         BookSQLEntity bookToSave = BookSQLEntity.fromBook(book);
         manager.getTransaction().begin();
         manager.persist(bookToSave);
@@ -26,7 +26,7 @@ public class MySQLBookDAO implements BookRepository {
     }
 
     @Override
-    public void updateBook(Book book) {
+    public void updateBook(final Book book) {
         BookSQLEntity bookToUpdate = BookSQLEntity.fromBook(book);
         manager.isOpen();
         manager.getTransaction().begin();
@@ -36,7 +36,7 @@ public class MySQLBookDAO implements BookRepository {
     }
 
     @Override
-    public void deleteBook(Book book) {
+    public void deleteBook(final Book book) {
         BookSQLEntity bookToDelete = manager.find(BookSQLEntity.class, book.getId());
         manager.getTransaction().begin();
         manager.remove(bookToDelete);
@@ -45,10 +45,10 @@ public class MySQLBookDAO implements BookRepository {
     }
 
     @Override
-    public List<Book> getBooksByOwnerId(String id) {
+    public List<Book> getBooksByOwnerId(final String id) {
         List<BookSQLEntity> sqlEntities;
         manager.getTransaction().begin();
-        sqlEntities = manager.createQuery("from Books where owner._id = :id").setParameter("id", id).getResultList();
+        sqlEntities = manager.createQuery("from Books where owner.id = :id").setParameter("id", id).getResultList();
         manager.getTransaction().commit();
         List<Book> bookToReturn = new ArrayList<>();
         sqlEntities.forEach(bookSQLEntity -> bookToReturn.add(bookSQLEntity.toBook()));
@@ -56,7 +56,7 @@ public class MySQLBookDAO implements BookRepository {
     }
 
     @Override
-    public Book getBookById(String id) {
+    public Book getBookById(final String id) {
         BookSQLEntity bookToReturn;
         bookToReturn = manager.find(BookSQLEntity.class, id);
         return bookToReturn.toBook();
@@ -64,7 +64,7 @@ public class MySQLBookDAO implements BookRepository {
 
     @Override
     public List<Book> getAllBooks() {
-        List<BookSQLEntity> bookList = null;
+        List<BookSQLEntity> bookList;
         manager.getTransaction().begin();
         bookList = manager.createQuery("from Books", BookSQLEntity.class).getResultList();
         manager.getTransaction().commit();

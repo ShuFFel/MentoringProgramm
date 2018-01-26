@@ -8,7 +8,7 @@ public class Book {
     private String name;
     private User owner;
 
-    public Book(String author, String name) {
+    public Book(final String author, final String name) {
         id = UUID.randomUUID().toString();
         this.author = author;
         this.name = name;
@@ -18,19 +18,19 @@ public class Book {
         return this.owner;
     }
 
-    public void setOwner(User user) {
+    public void setOwner(final User user) {
         this.owner = user;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(final String author) {
         this.author = author;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -48,6 +48,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return String.format("id: %s \nname: %s\nauthor: %s\nowner: %s", id, name, author, owner);
+        return String.format("id: %s%nname: %s%nauthor: %s%nowner: %s", id, name, author, owner);
     }
 }
