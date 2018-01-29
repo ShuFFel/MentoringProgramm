@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MentoringProgramm.iml" filepath="$PROJECT_DIR$/.idea/MentoringProgramm.iml" />
       <module fileurl="file://$PROJECT_DIR$/WebService/src/main/NoSQLTask.iml" filepath="$PROJECT_DIR$/WebService/src/main/NoSQLTask.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCore/Spring.iml" filepath="$PROJECT_DIR$/SpringCore/Spring.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WebService/Web.iml" filepath="$PROJECT_DIR$/WebService/Web.iml" />
       <module fileurl="file://$PROJECT_DIR$/WebService/Web.iml" filepath="$PROJECT_DIR$/WebService/Web.iml" />
     </modules>
   </component>

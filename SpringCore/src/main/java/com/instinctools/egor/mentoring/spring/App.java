@@ -14,12 +14,5 @@ public class App {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-        BookService bookService = applicationContext.getBean(LoggingBookDecorator.class);
-        Book book = bookService.getAllBooks().get(0);
-        UserService userService = applicationContext.getBean(LoggingUserDecorator.class);
-        User user = userService.getAllUsers().get(0);
-        bookService.assignBook(user, book);
-        System.out.println(userService.getAllUsers());
-        System.out.println("-------\n" + bookService.getAllBooks());
     }
 }

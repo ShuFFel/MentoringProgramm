@@ -20,7 +20,9 @@ public class UserDao implements UserRepository {
     @Transactional
     @Override
     public void createUser(User user) {
-        manager.persist(UserEntity.fromUser(user));
+        UserEntity userEntity = UserEntity.fromUser(user);
+        manager.persist(userEntity);
+        user.setId(userEntity.getId());
     }
 
     @Transactional

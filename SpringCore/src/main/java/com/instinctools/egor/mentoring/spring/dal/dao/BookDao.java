@@ -18,8 +18,10 @@ public class BookDao implements BookRepository {
 
     @Transactional
     @Override
-    public void createBook(Book book) {
+    public String createBook(Book book) {
         manager.persist(BookEntity.fromBook(book));
+        manager.flush();
+        return book.getId();
     }
 
     @Transactional
@@ -30,8 +32,8 @@ public class BookDao implements BookRepository {
 
     @Transactional
     @Override
-    public void deleteBook(Book book) {
-        BookEntity bookToDelete = manager.find(BookEntity.class, book.getId());
+    public void deleteBook(String bookId) {
+        BookEntity bookToDelete = manager.find(BookEntity.class, bookId);
         manager.remove(bookToDelete);
     }
 

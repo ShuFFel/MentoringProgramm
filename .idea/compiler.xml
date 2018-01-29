@@ -7,11 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="NoSQLTask" />
+        <module name="Spring" />
         <module name="Web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="NoSQLTask" target="1.8" />
+      <module name="Spring" target="1.8" />
       <module name="Web" target="1.8" />
     </bytecodeTargetLevel>
   </component>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/SpringCore" />
     <file type="web" url="file://$PROJECT_DIR$/WebService" />
   </component>
   <component name="MavenProjectsManager">
@@ -9,6 +10,7 @@
         <option value="$PROJECT_DIR$/WebService/src/main/pom.xml" />
         <option value="$PROJECT_DIR$/WebService/src/pom.xml" />
         <option value="$PROJECT_DIR$/WebService/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringCore/pom.xml" />
       </list>
     </option>
   </component>
