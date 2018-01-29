@@ -17,7 +17,7 @@ public class BookMongoEntity {
         this._id = UUID.randomUUID().toString();
     }
 
-    public BookMongoEntity(String name, String author) {
+    public BookMongoEntity(final String name, final String author) {
         this._id = UUID.randomUUID().toString();
         this.name = name;
         this.author = author;
@@ -27,15 +27,15 @@ public class BookMongoEntity {
         return owner;
     }
 
-    public void setOwner(User user) {
+    public void setOwner(final User user) {
         this.owner = UserMongoEntity.fromUser(user);
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(final String author) {
         this.author = author;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -51,12 +51,14 @@ public class BookMongoEntity {
         return this.name;
     }
 
-    public static BookMongoEntity fromDBObject(DBObject object) {
+    public static BookMongoEntity fromDBObject(final DBObject object) {
         BookMongoEntity book = new BookMongoEntity();
         book._id = (String) object.get("_id");
         book.name = (String) object.get("name");
         book.author = (String) object.get("author");
-        book.owner = (object.get("owner") != null) ? UserMongoEntity.fromDBObject((DBObject) object.get("owner")) : null;
+        book.owner = (object.get("owner") != null) ?
+                        UserMongoEntity.fromDBObject((DBObject) object.get("owner")) :
+                        null;
         return book;
     }
 
@@ -69,12 +71,14 @@ public class BookMongoEntity {
         return dbObject;
     }
 
-    public static BookMongoEntity fromBook(Book book) {
+    public static BookMongoEntity fromBook(final Book book) {
         BookMongoEntity bookMongoEntity = new BookMongoEntity();
         bookMongoEntity._id = book.getId();
         bookMongoEntity.author = book.getAuthor();
         bookMongoEntity.name = book.getName();
-        bookMongoEntity.owner = (book.getOwner() != null) ? UserMongoEntity.fromUser(book.getOwner()) : null;
+        bookMongoEntity.owner = (book.getOwner() != null) ?
+                        UserMongoEntity.fromUser(book.getOwner()) :
+                        null;
         return bookMongoEntity;
     }
 
@@ -87,6 +91,6 @@ public class BookMongoEntity {
 
     @Override
     public String toString() {
-        return String.format("id: %s \nname: %s\nauthor: %s\nowner: %s", _id, name, author, owner);
+        return String.format("id: %s %nname: %s%nauthor: %s%nowner: %s", _id, name, author, owner);
     }
 }

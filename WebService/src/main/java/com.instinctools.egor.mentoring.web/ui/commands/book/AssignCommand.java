@@ -10,11 +10,13 @@ public class AssignCommand extends Command {
     private final User userToAssign;
     private final Book bookToAssign;
 
-    public AssignCommand(BookService bookService, User userToAssign, Book bookToAssign) {
+    public AssignCommand(final BookService bookService, final User userToAssign, final Book bookToAssign) {
         super();
         this.bookService = bookService;
         this.userToAssign = userToAssign;
         this.bookToAssign = bookToAssign;
+        String commandInformation = getCommandInformation();
+        setCommandInformation(commandInformation.concat(" Command type: Assign\n"));
     }
 
     @Override
@@ -29,6 +31,6 @@ public class AssignCommand extends Command {
 
     @Override
     public String showInfo() {
-        return commandInformation.concat(" Command type: Assign\n");
+        return getCommandInformation();
     }
 }

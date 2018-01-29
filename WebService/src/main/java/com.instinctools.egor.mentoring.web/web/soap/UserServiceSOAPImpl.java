@@ -9,29 +9,30 @@ import javax.jws.WebService;
 import java.util.List;
 
 @WebService
-public class UserServiceSOAPImpl{
+public class UserServiceSOAPImpl {
     private UserService userService;
 
-    public UserServiceSOAPImpl(){}
+    public UserServiceSOAPImpl() {
+    }
 
-    public UserServiceSOAPImpl(UserService userServices) {
+    public UserServiceSOAPImpl(final UserService userService) {
         this.userService = userService;
     }
 
     @WebMethod
-    public void createUser(UserDTO user) {
+    public void createUser(final UserDTO user) {
         User userToCreate = new User(user.getName(), user.getBirthDate());
         userService.createUser(userToCreate);
     }
 
     @WebMethod
-    public void deleteUser(String id) {
+    public void deleteUser(final String id) {
         User userToDelete = userService.getUserById(id);
         userService.deleteUser(userToDelete);
     }
 
     @WebMethod
-    public void updateUser(String id, UserDTO user) {
+    public void updateUser(final String id, final UserDTO user) {
         User userToUpdate = userService.getUserById(id);
         userToUpdate.setUserName(user.getName());
         userToUpdate.setDateOfBirth(user.getBirthDate());

@@ -9,46 +9,46 @@ public class User {
     private String userName;
     private Date dateOfBirth;
 
-    public User(String userName, Date dateOfBirth) {
+    public User(final String userName, final Date dateOfBirth) {
         id = UUID.randomUUID().toString();
         this.userName = userName;
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = new Date(dateOfBirth.getTime());
     }
 
-    public void addBook(Book book){
+    public void addBook(final Book book) {
         book.setOwner(this);
     }
 
-    public void removeBook(Book book){
+    public void removeBook(final Book book) {
         book.setOwner(null);
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
-    public Date getDateOfBirth(){
-        return this.dateOfBirth;
+    public Date getDateOfBirth() {
+        return new Date(this.dateOfBirth.getTime());
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return this.userName;
     }
 
-    public void setId(String id){
+    public void setId(final String id) {
         this.id = id;
     }
 
-    public void setUserName(String user_name){
-        this.userName = user_name;
+    public void setUserName(final String userName) {
+        this.userName = userName;
     }
 
-    public void setDateOfBirth(Date dateOfBirth){
-        this.dateOfBirth = dateOfBirth;
+    public void setDateOfBirth(final Date dateOfBirth) {
+        this.dateOfBirth = new Date(dateOfBirth.getTime());
     }
 
     @Override
     public String toString() {
-        return String.format("id: %s \nname: %s \ndate_of_birth: %s \n", id, userName, dateOfBirth);
+        return String.format("id: %s %nname: %s %ndate_of_birth: %s %n", id, userName, dateOfBirth);
     }
 }

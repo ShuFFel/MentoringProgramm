@@ -10,14 +10,14 @@ import java.util.List;
 
 public class MySQLUserDAO implements UserRepository {
 
-    EntityManager manager;
+    private final EntityManager manager;
 
-    public MySQLUserDAO(EntityManager manager){
+    public MySQLUserDAO(final EntityManager manager) {
         this.manager = manager;
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(final User user) {
         UserSQLEntity userToSave = UserSQLEntity.fromUser(user);
         manager.getTransaction().begin();
         manager.persist(userToSave);
@@ -25,7 +25,7 @@ public class MySQLUserDAO implements UserRepository {
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(final User user) {
         UserSQLEntity userToDelete = manager.find(UserSQLEntity.class, user.getId());
         manager.getTransaction().begin();
         manager.remove(userToDelete);
@@ -33,14 +33,14 @@ public class MySQLUserDAO implements UserRepository {
     }
 
     @Override
-    public User getUserById(String id) {
+    public User getUserById(final String id) {
         User userToReturn;
         userToReturn = manager.find(User.class, id);
         return userToReturn;
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(final User user) {
         UserSQLEntity userToUpdate = UserSQLEntity.fromUser(user);
         manager.getTransaction().begin();
         manager.merge(userToUpdate);

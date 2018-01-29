@@ -11,13 +11,13 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(String name, Date birthDate) {
+    public UserDTO(final String name, final Date birthDate) {
         this.name = name;
-        this.birthDate = birthDate;
+        this.birthDate = new Date(birthDate.getTime());
     }
 
     public Date getBirthDate() {
-        return birthDate;
+        return new Date(birthDate.getTime());
     }
 
     public String getName() {

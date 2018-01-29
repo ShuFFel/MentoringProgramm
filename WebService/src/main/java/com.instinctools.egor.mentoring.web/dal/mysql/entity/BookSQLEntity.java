@@ -14,7 +14,7 @@ import java.util.UUID;
 public class BookSQLEntity {
 
     @Id
-    private String _id;
+    private String id;
 
     @Column
     private String name;
@@ -26,8 +26,8 @@ public class BookSQLEntity {
     @JsonIgnore
     private UserSQLEntity owner;
 
-    public BookSQLEntity(String name, String author) {
-        this._id = UUID.randomUUID().toString();
+    public BookSQLEntity(final String name, final String author) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.author = author;
     }
@@ -36,33 +36,33 @@ public class BookSQLEntity {
         return owner.toUser();
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(final User owner) {
         if (owner == null) {
             this.owner = null;
             return;
         }
         UserSQLEntity user = new UserSQLEntity();
-        user.set_id(owner.getId());
+        user.setId(owner.getId());
         this.owner = user;
     }
 
     public BookSQLEntity() {
-        this._id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
-        return _id;
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(final String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -70,29 +70,33 @@ public class BookSQLEntity {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(final String author) {
         this.author = author;
     }
 
 
     public Book toBook() {
         Book book = new Book(author, name);
-        book.setId(_id);
-        book.setOwner((owner != null) ? owner.toUser() : null);
+        book.setId(id);
+        book.setOwner((owner != null) ?
+                        owner.toUser() :
+                        null);
         return book;
     }
 
-    public static BookSQLEntity fromBook(Book book) {
+    public static BookSQLEntity fromBook(final Book book) {
         BookSQLEntity bookSQLEntity = new BookSQLEntity();
-        bookSQLEntity._id = book.getId();
+        bookSQLEntity.id = book.getId();
         bookSQLEntity.author = book.getAuthor();
         bookSQLEntity.name = book.getName();
-        bookSQLEntity.owner = (book.getOwner() != null) ? UserSQLEntity.fromUser(book.getOwner()) : null;
+        bookSQLEntity.owner = (book.getOwner() != null) ?
+                        UserSQLEntity.fromUser(book.getOwner()) :
+                        null;
         return bookSQLEntity;
     }
 
     @Override
     public String toString() {
-        return String.format("id: %s \nname: %s\nauthor: %s\nowner: %s", _id, name, author, owner);
+        return String.format("id: %s %nname: %s%nauthor: %s%nowner: %s", id, name, author, owner);
     }
 }

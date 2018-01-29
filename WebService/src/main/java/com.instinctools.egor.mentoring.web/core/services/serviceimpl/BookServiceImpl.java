@@ -10,17 +10,17 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     private RepositoryFactory repositoryFactory;
 
-    public BookServiceImpl(RepositoryFactory factory) {
+    public BookServiceImpl(final RepositoryFactory factory) {
         this.repositoryFactory = factory;
     }
 
     @Override
-    public void createBook(Book book) {
+    public void createBook(final Book book) {
         this.repositoryFactory.getBookRepo().createBook(book);
     }
 
     @Override
-    public void deleteBook(Book book) {
+    public void deleteBook(final Book book) {
         User owner = book.getOwner();
         if (owner != null) {
             owner.removeBook(book);
@@ -29,12 +29,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBook(Book book) {
+    public void updateBook(final Book book) {
         repositoryFactory.getBookRepo().updateBook(book);
     }
 
     @Override
-    public void assignBook(User user, Book book) {
+    public void assignBook(final User user, final Book book) {
         User owner = book.getOwner();
         if (owner != null) {
             owner.removeBook(book);
@@ -45,7 +45,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getBookById(String id) {
+    public Book getBookById(final String id) {
         return repositoryFactory.getBookRepo().getBookById(id);
     }
 

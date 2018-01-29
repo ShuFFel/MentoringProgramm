@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Objects;
 
-public class Starter {
+public final class Starter {
+    private Starter() {
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Starter.class);
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Configs configs = null;
         try {
             configs = new Configs("application.properties");

@@ -16,27 +16,28 @@ public class BookServiceSOAPImpl {
     private BookService bookService;
     private UserService userService;
 
-    public BookServiceSOAPImpl(){}
+    public BookServiceSOAPImpl() {
+    }
 
-    public BookServiceSOAPImpl(BookService bookService, UserService userService) {
+    public BookServiceSOAPImpl(final BookService bookService, final UserService userService) {
         this.bookService = bookService;
         this.userService = userService;
     }
 
     @WebMethod
-    public void createBook(BookDTO book) {
+    public void createBook(final BookDTO book) {
         Book bookToCreate = new Book(book.getName(), book.getAuthor());
         bookService.createBook(bookToCreate);
     }
 
     @WebMethod
-    public void deleteBook(String id) {
+    public void deleteBook(final String id) {
         Book bookToDelete = bookService.getBookById(id);
         bookService.deleteBook(bookToDelete);
     }
 
     @WebMethod
-    public void updateBook(String id, BookDTO book) {
+    public void updateBook(final String id, final BookDTO book) {
         Book bookToUpdate = bookService.getBookById(id);
         bookToUpdate.setName(book.getName());
         bookToUpdate.setAuthor(book.getAuthor());
@@ -44,7 +45,7 @@ public class BookServiceSOAPImpl {
     }
 
     @WebMethod
-    public void assignBook(String userId, String bookId) {
+    public void assignBook(final String userId, final String bookId) {
         User userToAssign = userService.getUserById(userId);
         Book bookToAssign = bookService.getBookById(bookId);
         bookService.assignBook(userToAssign, bookToAssign);

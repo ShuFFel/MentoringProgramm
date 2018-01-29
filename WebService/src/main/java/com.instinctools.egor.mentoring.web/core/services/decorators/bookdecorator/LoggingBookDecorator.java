@@ -9,49 +9,49 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class LoggingBookDecorator implements BookService {
-    private static final Logger log = LoggerFactory.getLogger(LoggingBookDecorator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingBookDecorator.class);
     private BookService wrappee;
 
-    public LoggingBookDecorator(BookService wrappee) {
+    public LoggingBookDecorator(final BookService wrappee) {
         this.wrappee = wrappee;
     }
 
     @Override
-    public void createBook(Book book) {
+    public void createBook(final Book book) {
         wrappee.createBook(book);
-        log.info("Book: " + book.toString() + "\nCreated");
+        LOGGER.info("Book: " + book.toString() + "\nCreated");
     }
 
     @Override
-    public void deleteBook(Book book) {
+    public void deleteBook(final Book book) {
         wrappee.deleteBook(book);
-        log.info("Book: " + book.toString() + "\nDeleted");
+        LOGGER.info("Book: " + book.toString() + "\nDeleted");
     }
 
     @Override
-    public void updateBook(Book book) {
+    public void updateBook(final Book book) {
         wrappee.updateBook(book);
-        log.info("Book with id: " + book.getId() + " was updated\n" +
-                "Result: " + book.toString());
+        LOGGER.info("Book with id: " + book.getId() + " was updated\n" +
+                        "Result: " + book.toString());
     }
 
     @Override
-    public void assignBook(User user, Book book) {
+    public void assignBook(final User user, final Book book) {
         wrappee.assignBook(user, book);
-        log.info("Book: " + book.toString() + " was assigned to user: " + user.getUserName());
+        LOGGER.info("Book: " + book.toString() + " was assigned to user: " + user.getUserName());
     }
 
     @Override
-    public Book getBookById(String id) {
-        log.info("You look for book with id: " + id + "\n");
+    public Book getBookById(final String id) {
+        LOGGER.info("You look for book with id: " + id + "\n");
         Book bookById = wrappee.getBookById(id);
-        log.info("Found book: " + bookById.toString());
+        LOGGER.info("Found book: " + bookById.toString());
         return bookById;
     }
 
     @Override
     public List<Book> getAllBooks() {
-        log.info("You look for list of all books");
+        LOGGER.info("You look for list of all books");
         return wrappee.getAllBooks();
     }
 }

@@ -10,68 +10,68 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity(name = "Users")
-public class UserSQLEntity{
+public class UserSQLEntity {
 
     @Id
-    private String _id;
+    private String id;
 
-    @Column
-    private String user_name;
+    @Column(name = "user_name")
+    private String userName;
 
-    @Column
-    private Date date_of_birth;
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
 
-    public UserSQLEntity(String user_name, Date date_of_birth) {
-        this._id = UUID.randomUUID().toString();
-        this.user_name = user_name;
-        this.date_of_birth = date_of_birth;
+    public UserSQLEntity(final String userName, final Date dateOfBirth) {
+        this.id = UUID.randomUUID().toString();
+        this.userName = userName;
+        this.dateOfBirth = new Date(dateOfBirth.getTime());
     }
 
     public UserSQLEntity() {
-        this._id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString();
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String id) {
-        this._id = id;
+    public void setId(final String id) {
+        this.id = id;
     }
 
     public String getUserName() {
-        return user_name;
+        return userName;
     }
 
-    public void setUserName(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(final String userName) {
+        this.userName = userName;
     }
 
     public Date getDateOfBirth() {
-        return date_of_birth;
+        return new Date(dateOfBirth.getTime());
     }
 
-    public void setDateOfBirth(Date date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(final Date dateOfBirth) {
+        this.dateOfBirth = new Date(dateOfBirth.getTime());
     }
 
-    public void addBook(Book book){
+    public void addBook(final Book book) {
         book.setOwner(this.toUser());
     }
 
-    public void removeBook(Book book){
+    public void removeBook(final Book book) {
         book.setOwner(null);
     }
 
-    public User toUser(){
-        User user = new User(user_name, date_of_birth);
-        user.setId(_id);
+    public User toUser() {
+        User user = new User(userName, dateOfBirth);
+        user.setId(id);
         return user;
     }
 
-    public static UserSQLEntity fromUser(User user){
+    public static UserSQLEntity fromUser(final User user) {
         UserSQLEntity sqlEntity = new UserSQLEntity();
-        sqlEntity.set_id(user.getId());
+        sqlEntity.setId(user.getId());
         sqlEntity.setDateOfBirth(user.getDateOfBirth());
         sqlEntity.setUserName(user.getUserName());
         return sqlEntity;

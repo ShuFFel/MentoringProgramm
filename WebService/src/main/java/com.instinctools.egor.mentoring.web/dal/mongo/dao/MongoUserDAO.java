@@ -15,32 +15,32 @@ public class MongoUserDAO implements UserRepository {
 
     private final DBCollection collection;
 
-    public MongoUserDAO(DB mongoDB){
+    public MongoUserDAO(final DB mongoDB) {
         this.collection = mongoDB.getCollection("user");
     }
 
 
     @Override
-    public void createUser(User user) {
+    public void createUser(final User user) {
         UserMongoEntity userToSave = UserMongoEntity.fromUser(user);
         collection.save(userToSave.toDbObject());
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(final User user) {
         UserMongoEntity userToDelete = UserMongoEntity.fromUser(user);
         collection.remove(userToDelete.toDbObject());
     }
 
     @Override
-    public User getUserById(String id) {
+    public User getUserById(final String id) {
         BasicDBObject searchQuery = new BasicDBObject().append("_id", id);
         DBObject object = collection.findOne(searchQuery);
         return UserMongoEntity.fromDBObject(object).toUser();
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(final User user) {
         UserMongoEntity userToUpdate = UserMongoEntity.fromUser(user);
         BasicDBObject searchQuery = new BasicDBObject().append("_id", userToUpdate.getId());
         collection.update(searchQuery, userToUpdate.toDbObject());

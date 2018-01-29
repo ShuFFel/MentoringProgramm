@@ -20,7 +20,7 @@ public class Configs {
 
     private EntityManager entityManager;
 
-    public Configs(String propertyFileName) throws IOException {
+    public Configs(final String propertyFileName) throws IOException {
         configProperties = new Properties();
         InputStream is;
         is = getClass().getClassLoader().getResourceAsStream(propertyFileName);
@@ -59,7 +59,7 @@ public class Configs {
     }
 
     public EntityManager getEntityManager() {
-        if(entityManager == null){
+        if (entityManager == null) {
             String persistenceUnitName = configProperties.getProperty("persistenceUnitName");
             entityManager = Persistence.createEntityManagerFactory(persistenceUnitName).createEntityManager();
         }
