@@ -1,12 +1,15 @@
 package com.instinctools.egor.mentoring.spring.dal.entities;
 
 import com.instinctools.egor.mentoring.spring.core.entity.Book;
+import com.instinctools.egor.mentoring.spring.core.entity.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "Book")
 public class BookEntity {
@@ -21,6 +24,9 @@ public class BookEntity {
 
     @Column(name = "author")
     private String author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity owner;
 
     public BookEntity() {
     }
@@ -54,9 +60,18 @@ public class BookEntity {
         this.author = author;
     }
 
+    public UserEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final UserEntity owner) {
+        this.owner = owner;
+    }
+
     public Book toBook() {
-        Book book = new Book(author, name);
+        Book book = new Book(name, author);
         book.setId(id);
+        book.setOwner((owner != null) ? owner.toUser() : null);
         return book;
     }
 
@@ -65,11 +80,12 @@ public class BookEntity {
         bookEntity.id = book.getId();
         bookEntity.name = book.getName();
         bookEntity.author = book.getAuthor();
+        bookEntity.owner = (book.getOwner() != null) ? UserEntity.fromUser(book.getOwner()) : null;
         return bookEntity;
     }
 
     @Override
     public String toString() {
-        return String.format("Book:%nid: %s %nname: %s %nauthor: %s", id, name, author);
+        return String.format("Book:%nid: %s %nname: %s %nauthor: %s %nowner: %s", id, name, author, owner);
     }
 }

@@ -11,7 +11,6 @@ public class User {
     private String userName;
     private Date dateOfBirth;
 
-    private List<Book> books;
 
     public User() {
         id = UUID.randomUUID().toString();
@@ -20,15 +19,14 @@ public class User {
     public User(final String userName, final Date dateOfBirth) {
         this.userName = userName;
         this.dateOfBirth = new Date(dateOfBirth.getTime());
-        this.books = new ArrayList<>();
     }
 
     public void addBook(final Book book) {
-        books.add(book);
+        book.setOwner(this);
     }
 
     public void removeBook(final Book book) {
-        books.remove(book);
+        book.setOwner(null);
     }
 
     public String getId() {
@@ -53,14 +51,6 @@ public class User {
 
     public void setDateOfBirth(final Date dateOfBirth) {
         this.dateOfBirth = new Date(dateOfBirth.getTime());
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(final List<Book> books) {
-        this.books = books;
     }
 
     @Override

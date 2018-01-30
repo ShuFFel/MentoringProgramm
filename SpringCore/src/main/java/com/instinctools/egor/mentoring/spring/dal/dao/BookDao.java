@@ -11,37 +11,37 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Repository("bookDAO")
 public class BookDao implements BookRepository {
     @PersistenceContext
     private EntityManager manager;
 
     @Transactional
     @Override
-    public String createBook(Book book) {
-        manager.persist(BookEntity.fromBook(book));
-        manager.flush();
-        return book.getId();
+    public void createBook(final Book book) {
+        BookEntity bookEntity = BookEntity.fromBook(book);
+        manager.persist(bookEntity);
+        book.setId(bookEntity.getId());
     }
 
     @Transactional
     @Override
-    public void updateBook(Book book) {
+    public void updateBook(final Book book) {
         manager.merge(BookEntity.fromBook(book));
     }
 
     @Transactional
     @Override
-    public void deleteBook(String bookId) {
+    public void deleteBook(final String bookId) {
         BookEntity bookToDelete = manager.find(BookEntity.class, bookId);
         manager.remove(bookToDelete);
     }
 
     @Transactional
     @Override
-    public List<Book> getBooksByOwnerId(String id) {
+    public List<Book> getBooksByOwnerId(final String id) {
         List<BookEntity> sqlEntities;
-        sqlEntities = manager.createQuery("from Book").getResultList();
+        sqlEntities = manager.createQuery("from Book where owner.id= :id").setParameter("id", id).getResultList();
         List<Book> bookToReturn = new ArrayList<>();
         sqlEntities.forEach(bookSQLEntity -> bookToReturn.add(bookSQLEntity.toBook()));
         return bookToReturn;
@@ -49,8 +49,9 @@ public class BookDao implements BookRepository {
 
     @Transactional
     @Override
-    public Book getBookById(String id) {
-        return manager.find(BookEntity.class, id).toBook();
+    public Book getBookById(final String id) {
+        BookEntity bookEntity = manager.find(BookEntity.class, id);
+        return (bookEntity != null) ? bookEntity.toBook() : null;
     }
 
     @Transactional

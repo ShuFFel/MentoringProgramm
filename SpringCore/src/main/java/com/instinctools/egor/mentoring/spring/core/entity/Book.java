@@ -6,12 +6,13 @@ public class Book {
     private String id;
     private String author;
     private String name;
+    private User owner;
 
     public Book() {
         id = UUID.randomUUID().toString();
     }
 
-    public Book(final String author, final String name) {
+    public Book(final String name, final String author) {
         this.author = author;
         this.name = name;
     }
@@ -38,6 +39,14 @@ public class Book {
 
     public String getName() {
         return this.name;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final User owner) {
+        this.owner = owner;
     }
 
     @Override

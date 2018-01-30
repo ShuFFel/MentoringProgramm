@@ -27,16 +27,12 @@ public class UserEntity {
     @Column(name = "birth_date")
     private Date birthDate;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<BookEntity> books;
-
     public UserEntity() {
     }
 
-    public UserEntity(final String userName, final Date birthDate) {
+    private UserEntity(final String userName, final Date birthDate) {
         this.userName = userName;
         this.birthDate = birthDate;
-        this.books = new ArrayList<>();
     }
 
     public String getId() {
@@ -53,14 +49,6 @@ public class UserEntity {
 
     public void setUserName(final String userName) {
         this.userName = userName;
-    }
-
-    public List<BookEntity> getBooks() {
-        return books;
-    }
-
-    public void setBooks(final List<BookEntity> books) {
-        this.books = books;
     }
 
     public Date getBirthDate() {
@@ -80,8 +68,6 @@ public class UserEntity {
     public static UserEntity fromUser(final User user) {
         UserEntity userEntity = new UserEntity(user.getUserName(), user.getDateOfBirth());
         userEntity.id = user.getId();
-        userEntity.books = new ArrayList<>();
-        user.getBooks().forEach(book -> userEntity.books.add(BookEntity.fromBook(book)));
         return userEntity;
     }
 

@@ -51,7 +51,7 @@ public class LoggingBookDecorator implements BookService {
     public Book getBookById(final String id) {
         LOGGER.info("You look for book with id: " + id + "\n");
         Book bookById = wrappee.getBookById(id);
-        LOGGER.info("Found book: " + bookById.toString());
+        LOGGER.info("Found book: " + bookById);
         return bookById;
     }
 

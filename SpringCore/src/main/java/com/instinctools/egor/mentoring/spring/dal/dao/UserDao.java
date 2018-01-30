@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Repository("userDAO")
 public class UserDao implements UserRepository {
 
     @PersistenceContext
@@ -19,7 +19,7 @@ public class UserDao implements UserRepository {
 
     @Transactional
     @Override
-    public void createUser(User user) {
+    public void createUser(final User user) {
         UserEntity userEntity = UserEntity.fromUser(user);
         manager.persist(userEntity);
         user.setId(userEntity.getId());
@@ -27,20 +27,20 @@ public class UserDao implements UserRepository {
 
     @Transactional
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(final User user) {
         UserEntity entityToDelete = manager.find(UserEntity.class, user.getId());
         manager.remove(entityToDelete);
     }
 
     @Transactional
     @Override
-    public User getUserById(String id) {
+    public User getUserById(final String id) {
         return manager.find(UserEntity.class, id).toUser();
     }
 
     @Transactional
     @Override
-    public void updateUser(User user) {
+    public void updateUser(final User user) {
         manager.merge(UserEntity.fromUser(user));
     }
 

@@ -5,7 +5,7 @@ import com.instinctools.egor.mentoring.spring.core.entity.Book;
 import java.util.List;
 
 public interface BookRepository {
-    String createBook(Book book);
+    void createBook(Book book);
 
     void updateBook(Book book);
 
