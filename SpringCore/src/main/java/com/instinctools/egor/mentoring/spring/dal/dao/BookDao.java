@@ -16,7 +16,6 @@ public class BookDao implements BookRepository {
     @PersistenceContext
     private EntityManager manager;
 
-    @Transactional
     @Override
     public void createBook(final Book book) {
         BookEntity bookEntity = BookEntity.fromBook(book);
@@ -24,20 +23,17 @@ public class BookDao implements BookRepository {
         book.setId(bookEntity.getId());
     }
 
-    @Transactional
     @Override
     public void updateBook(final Book book) {
         manager.merge(BookEntity.fromBook(book));
     }
 
-    @Transactional
     @Override
     public void deleteBook(final String bookId) {
         BookEntity bookToDelete = manager.find(BookEntity.class, bookId);
         manager.remove(bookToDelete);
     }
 
-    @Transactional
     @Override
     public List<Book> getBooksByOwnerId(final String id) {
         List<BookEntity> sqlEntities;
@@ -47,14 +43,12 @@ public class BookDao implements BookRepository {
         return bookToReturn;
     }
 
-    @Transactional
     @Override
     public Book getBookById(final String id) {
         BookEntity bookEntity = manager.find(BookEntity.class, id);
         return (bookEntity != null) ? bookEntity.toBook() : null;
     }
 
-    @Transactional
     @Override
     public List<Book> getAllBooks() {
         List<BookEntity> bookList;

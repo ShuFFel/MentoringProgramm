@@ -17,7 +17,6 @@ public class UserDao implements UserRepository {
     @PersistenceContext
     private EntityManager manager;
 
-    @Transactional
     @Override
     public void createUser(final User user) {
         UserEntity userEntity = UserEntity.fromUser(user);
@@ -25,26 +24,22 @@ public class UserDao implements UserRepository {
         user.setId(userEntity.getId());
     }
 
-    @Transactional
     @Override
     public void deleteUser(final User user) {
         UserEntity entityToDelete = manager.find(UserEntity.class, user.getId());
         manager.remove(entityToDelete);
     }
 
-    @Transactional
     @Override
     public User getUserById(final String id) {
         return manager.find(UserEntity.class, id).toUser();
     }
 
-    @Transactional
     @Override
     public void updateUser(final User user) {
         manager.merge(UserEntity.fromUser(user));
     }
 
-    @Transactional
     @Override
     public List<User> getAllUsers() {
         List<UserEntity> resultList;

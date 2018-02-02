@@ -7,6 +7,7 @@ import com.instinctools.egor.mentoring.spring.core.repository.UserRepository;
 import com.instinctools.egor.mentoring.spring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,11 +22,13 @@ public class UserServiceImpl implements UserService {
         this.bookRepository = bookRepository;
     }
 
+    @Transactional
     @Override
     public void createUser(final User user) {
         this.userRepository.createUser(user);
     }
 
+    @Transactional
     @Override
     public void deleteUser(final User user) {
         List<Book> userBooks = this.bookRepository.getBooksByOwnerId(user.getId());
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteUser(user);
     }
 
+    @Transactional
     @Override
     public void updateUser(final User user) {
         List<Book> userBooks = this.bookRepository.getBooksByOwnerId(user.getId());
@@ -46,11 +50,13 @@ public class UserServiceImpl implements UserService {
         this.userRepository.updateUser(user);
     }
 
+    @Transactional
     @Override
     public User getUserById(final String id) {
         return userRepository.getUserById(id);
     }
 
+    @Transactional
     @Override
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
