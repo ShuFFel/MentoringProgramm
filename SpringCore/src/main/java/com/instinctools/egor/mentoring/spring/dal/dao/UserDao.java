@@ -4,7 +4,6 @@ import com.instinctools.egor.mentoring.spring.core.entity.User;
 import com.instinctools.egor.mentoring.spring.core.repository.UserRepository;
 import com.instinctools.egor.mentoring.spring.dal.entities.UserEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

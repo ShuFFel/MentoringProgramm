@@ -4,7 +4,6 @@ import com.instinctools.egor.mentoring.spring.core.entity.Book;
 import com.instinctools.egor.mentoring.spring.core.repository.BookRepository;
 import com.instinctools.egor.mentoring.spring.dal.entities.BookEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

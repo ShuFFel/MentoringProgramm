@@ -1,7 +1,6 @@
 package com.instinctools.egor.mentoring.spring.dal.entities;
 
 import com.instinctools.egor.mentoring.spring.core.entity.Book;
-import com.instinctools.egor.mentoring.spring.core.entity.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
