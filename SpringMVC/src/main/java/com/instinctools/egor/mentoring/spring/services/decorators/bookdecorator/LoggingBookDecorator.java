@@ -18,7 +18,7 @@ public class LoggingBookDecorator implements BookService {
     private BookService wrappee;
 
     @Autowired
-    public void setWrappee(@Qualifier("bookService") BookService wrappee) {
+    public void setWrappee(@Qualifier("bookService") final BookService wrappee) {
         this.wrappee = wrappee;
     }
 
@@ -53,6 +53,12 @@ public class LoggingBookDecorator implements BookService {
         Book bookById = wrappee.getBookById(id);
         LOGGER.info("Found book: " + bookById);
         return bookById;
+    }
+
+    @Override
+    public void returnBook(final Book book) {
+        wrappee.returnBook(book);
+        LOGGER.info("Book: " + book + " was returned to library!");
     }
 
     @Override

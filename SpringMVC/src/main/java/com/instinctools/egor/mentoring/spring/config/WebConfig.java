@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureContentNegotiation(
-                    ContentNegotiationConfigurer configurer) {
+                    final ContentNegotiationConfigurer configurer) {
         configurer.favorPathExtension(true).
                         ignoreAcceptHeader(true).
                         useJaf(false).

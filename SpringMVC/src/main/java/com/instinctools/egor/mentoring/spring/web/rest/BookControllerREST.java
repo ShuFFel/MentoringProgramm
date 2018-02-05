@@ -9,21 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController(value = "/book")
+@Controller
+@RequestMapping("/book")
 public class BookControllerREST {
 
     private final UserService userService;
     private final BookService bookService;
 
     @Autowired
-    public BookControllerREST(UserService userService, BookService bookService) {
+    public BookControllerREST(final UserService userService, final BookService bookService) {
         this.userService = userService;
         this.bookService = bookService;
     }

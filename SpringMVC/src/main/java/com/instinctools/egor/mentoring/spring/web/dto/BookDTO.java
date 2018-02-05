@@ -4,8 +4,8 @@ import com.instinctools.egor.mentoring.spring.core.entity.Book;
 
 public class BookDTO {
     private String name;
-    private String author;
 
+    private String author;
 
     public BookDTO() {
     }
@@ -23,8 +23,17 @@ public class BookDTO {
         return author;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public Book toModel() {
-        Book book = new Book(author, name);
+        Book book = new Book(name, author);
         return book;
     }
 }
+

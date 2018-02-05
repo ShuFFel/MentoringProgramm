@@ -42,6 +42,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public void returnBook(final Book book) {
+        book.setOwner(null);
+        bookRepository.updateBook(book);
+    }
+
+    @Override
     public Book getBookById(final String id) {
         return bookRepository.getBookById(id);
     }

@@ -14,6 +14,8 @@ public interface BookService {
 
     void assignBook(User user, Book book);
 
+    void returnBook(Book book);
+
     Book getBookById(String id);
 
     List<Book> getAllBooks();

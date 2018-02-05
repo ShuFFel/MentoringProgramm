@@ -48,7 +48,7 @@ public class UserDao implements UserRepository {
     @Override
     public List<User> getAllUsers() {
         List<UserEntity> resultList;
-        resultList = manager.createQuery("from User", UserEntity.class).getResultList();
+        resultList = manager.createQuery("from User ", UserEntity.class).getResultList();
         List<User> list = new ArrayList<>();
         resultList.forEach(userSQLEntity -> list.add(userSQLEntity.toUser()));
         return list;

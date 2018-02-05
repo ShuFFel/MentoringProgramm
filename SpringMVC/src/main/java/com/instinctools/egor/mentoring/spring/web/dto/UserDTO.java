@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class UserDTO {
     private String name;
+
     private Date birthDate;
 
     public UserDTO() {
@@ -17,7 +18,15 @@ public class UserDTO {
     }
 
     public Date getBirthDate() {
-        return new Date(birthDate.getTime());
+        return birthDate;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getName() {

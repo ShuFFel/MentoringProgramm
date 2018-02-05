@@ -21,7 +21,7 @@ public class UserControllerREST {
     private final UserService userService;
 
     @Autowired
-    public UserControllerREST(UserService userService) {
+    public UserControllerREST(final UserService userService) {
         this.userService = userService;
     }
 
