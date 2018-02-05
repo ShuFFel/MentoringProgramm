@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -39,14 +40,6 @@ public class UserControllerMVC {
         return new ModelAndView("redirect:/users");
     }
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-        sdf.setLenient(true);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
-    }
-
-
     @GetMapping("/create/form")
     public ModelAndView getCreateForm() {
         ModelAndView modelAndView = new ModelAndView("userCreate");
@@ -62,6 +55,13 @@ public class UserControllerMVC {
         return modelAndView;
     }
 
+    @InitBinder
+    public void bindingPreparation(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+        CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
+        binder.registerCustomEditor(Date.class, orderDateEditor);
+    }
+
     @PostMapping("/delete")
     public ModelAndView deleteUser(@RequestParam("userId") final String userId) {
         final User user = service.getUserById(userId);
@@ -69,13 +69,25 @@ public class UserControllerMVC {
         return new ModelAndView("redirect:/users");
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ModelAndView updateUser(@RequestParam("userId") final String userId,
-                                   @RequestParam("user") final UserDTO userDTO) {
+                                   @ModelAttribute("userDTO") final UserDTO userDTO) {
         final User user = service.getUserById(userId);
         user.setUserName(userDTO.getName());
         user.setDateOfBirth(userDTO.getBirthDate());
         service.updateUser(user);
-        return new ModelAndView();
+        return new ModelAndView("redirect:/users");
     }
+
+    @GetMapping("/update/form")
+    public ModelAndView getUpdateForm(@RequestParam("userId") final String userId) {
+        ModelAndView modelAndView = new ModelAndView("userUpdate");
+        modelAndView.addObject("userId", userId);
+        User userById = service.getUserById(userId);
+        UserDTO userDTO = new UserDTO(userById.getUserName(), userById.getDateOfBirth());
+        modelAndView.addObject("userDTO", userDTO);
+        return modelAndView;
+    }
+
+
 }

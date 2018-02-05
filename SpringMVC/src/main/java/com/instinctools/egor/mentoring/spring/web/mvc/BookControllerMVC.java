@@ -68,7 +68,7 @@ public class BookControllerMVC {
 
     @GetMapping("/update/form")
     public ModelAndView getUpdateForm(@RequestParam("bookId") final String bookId) {
-        ModelAndView modelAndView = new ModelAndView("updateBook");
+        ModelAndView modelAndView = new ModelAndView("bookUpdate");
         modelAndView.addObject("bookId", bookId);
         modelAndView.addObject("bookDTO", bookService.getBookById(bookId));
         return modelAndView;
