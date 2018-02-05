@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="com.instinctools.egor.mentoring.spring.dal.dao"/>
+    <context:component-scan base-package="com.instinctools.egor.mentoring.spring.services"/>
+    <bean id="userDAO" class="com.instinctools.egor.mentoring.spring.dal.dao.UserDao" scope="singleton"/>
+    <bean id="bookDAO" class="com.instinctools.egor.mentoring.spring.dal.dao.BookDao" scope="singleton"/>
+    <bean id="userService" class="com.instinctools.egor.mentoring.spring.services.serviceimpl.UserServiceImpl"
+          autowire="constructor">
+        <constructor-arg ref="userDAO"/>
+        <constructor-arg ref="bookDAO"/>
+    </bean>
+    <bean id="bookService" class="com.instinctools.egor.mentoring.spring.services.serviceimpl.BookServiceImpl"/>
+    <bean id="loggingUserDecorator"
+          class="com.instinctools.egor.mentoring.spring.services.decorators.userdecorator.LoggingUserDecorator"
+          init-method="sendMessage" destroy-method="sendMessage">
+        <property name="wrappee" ref="userService"/>
+    </bean>
+    <bean id="loggingBookDecorator"
+          class="com.instinctools.egor.mentoring.spring.services.decorators.bookdecorator.LoggingBookDecorator"/>
+</beans>
