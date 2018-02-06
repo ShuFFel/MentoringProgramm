@@ -32,4 +32,8 @@
     <definition name="home" extends="layout.basic">
         <put-attribute name="body" value="/WEB-INF/tiles/view/home.jsp"/>
     </definition>
+
+    <definition name="assignForm" extends="layout.basic">
+        <put-attribute name="body" value="/WEB-INF/tiles/view/book/assignForm.jsp"/>
+    </definition>
 </tiles-definitions>

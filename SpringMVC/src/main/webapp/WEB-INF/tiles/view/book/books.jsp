@@ -18,6 +18,8 @@
             <td>id</td>
             <td>name</td>
             <td>author</td>
+            <td>owner</td>
+            <td></td>
             <td></td>
             <td></td>
         </tr>
@@ -29,6 +31,15 @@
                 <td>${listValue.id}</td>
                 <td>${listValue.name}</td>
                 <td>${listValue.author}</td>
+                <td>
+                    <c:if test="${listValue.owner != null}">
+                        ${listValue.owner.toString()}
+                    </c:if>
+                    <c:if test="${listValue.owner == null}">
+                        Free
+                    </c:if>
+
+                </td>
                 <td>
                     <form:form action="/books/delete" method="post">
                         <label>
@@ -45,6 +56,24 @@
                         <button type="submit" class="btn btn-info">Edit</button>
                     </form:form>
                 </td>
+                <td>
+                    <c:if test="${listValue.owner == null}">
+                        <form:form action="/books/assign/form" method="get">
+                            <label>
+                                <input hidden name="bookId" value="${listValue.id}">
+                                <button type="submit" class="btn btn-success">book it</button>
+                            </label>
+                        </form:form>
+                    </c:if>
+                    <c:if test="${listValue.owner != null}">
+                        <form:form action="/books/return" method="post">
+                            <label>
+                                <input hidden name="bookId" value="${listValue.id}">
+                                <button type="submit" class="btn btn-danger">return it</button>
+                            </label>
+                        </form:form>
+                    </c:if>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
@@ -55,3 +84,4 @@
         <button type="submit" class="btn btn-secondary">Add book</button>
     </form:form>
 </div>
+

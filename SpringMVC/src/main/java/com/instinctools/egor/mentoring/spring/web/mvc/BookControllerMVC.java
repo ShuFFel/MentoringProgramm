@@ -43,7 +43,7 @@ public class BookControllerMVC {
         User user = userService.getUserById(userId);
         Book book = bookService.getBookById(bookId);
         bookService.assignBook(user, book);
-        return new ModelAndView();
+        return new ModelAndView("redirect:/books");
     }
 
     @PostMapping("/return")
@@ -53,7 +53,7 @@ public class BookControllerMVC {
             return new ModelAndView("error");
         }
         bookService.returnBook(book);
-        return new ModelAndView();
+        return new ModelAndView("redirect:/books");
     }
 
     @PostMapping("/update")
@@ -92,6 +92,14 @@ public class BookControllerMVC {
     public ModelAndView getCreateBookForm() {
         ModelAndView modelAndView = new ModelAndView("bookCreate");
         modelAndView.addObject("bookDTO", new BookDTO("fromJava1", "fromJava2"));
+        return modelAndView;
+    }
+
+    @GetMapping("/assign/form")
+    public ModelAndView getAssignForm(@RequestParam("bookId") final String bookId) {
+        ModelAndView modelAndView = new ModelAndView("assignForm");
+        modelAndView.addObject("bookId", bookId);
+        modelAndView.addObject("userList", userService.getAllUsers());
         return modelAndView;
     }
 
