@@ -7,3 +7,4 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div>Here Come some app Info</div>
+<h1 class="text-center">Welcome to Library App!</h1>
